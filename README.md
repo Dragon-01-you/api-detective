@@ -6,12 +6,17 @@
 
 **AI 中转站 API 验真取证工具 —— 让每一分钱都花在真模型上**
 
-*模型验真 · 系统提示词取证 · 上下游供应链溯源*
+*LLM relay API forensics — verify the model behind your API key, extract injected system prompts, and trace the upstream supply chain.*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![GitHub stars](https://img.shields.io/github/stars/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/Dragon-01-you/api-detective)](https://github.com/Dragon-01-you/api-detective/issues)
 [![No Telemetry](https://img.shields.io/badge/Telemetry-None-success.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
+
+模型验真 · 系统提示词取证 · 上下游供应链溯源
 
 </div>
 
@@ -30,7 +35,7 @@
 ### 它能回答 5 个问题
 
 | # | 问题 | 怎么回答 |
-|---|---|---|
+|:---:|---|---|
 | 1 | **这是什么模型？** | 身份测谎 + 思维链泄露 + 提示词提取（不只看 `model` 字段——那个一行代码就能伪造） |
 | 2 | **什么水平？** | 多学科 × 多难度学力测验，输出能力档位 |
 | 3 | **是不是同一个？** | 同站多渠道 / 中转 vs 官方的模型同一性检验（MET） |
@@ -39,12 +44,46 @@
 
 ---
 
+## 📑 目录
+
+- [快速开始](#-快速开始)
+- [工作原理](#-工作原理)
+- [技术实现](#-采用了哪些技术实现)
+- [对比同类项目](#-对比同类项目)
+- [实际案例](#-实际案例relay-x-低价包月中转站验真已脱敏)
+- [证据输出结构](#-证据输出结构)
+- [常见问题](#-faq)
+- [路线图](#-路线图)
+- [参与贡献](#-参与贡献)
+- [使用须知](#-使用须知与免责声明)
+
+---
+
 ## 🚀 快速开始
 
-```bash
-pip install openai tiktoken requests
+### 环境要求
 
-# 一键挖掘（推荐）: URL + API Key → 模型定位 / 上下游关系网 / 系统提示词 / 总档案
+| 依赖 | 版本 |
+|---|---|
+| Python | ≥ 3.10 |
+| openai / tiktoken / requests | 最新版即可 |
+| 一个待验真端点 | 自有 Key 的 OpenAI 兼容 API（形如 `https://xxx/v1`） |
+
+### 三步上手
+
+**① 安装依赖**
+
+```bash
+git clone https://github.com/Dragon-01-you/api-detective.git
+cd api-detective
+pip install -r requirements.txt
+```
+
+**② 一键挖掘（推荐）**
+
+URL + API Key → 模型定位 / 上下游关系网 / 系统提示词 / 总档案：
+
+```bash
 python -m api_detective dig \
   --base-url https://your-relay.example.com/v1 \
   --api-key sk-xxxx \
@@ -52,13 +91,42 @@ python -m api_detective dig \
   --compare-model kimi-k3 \
   --budget 200 \
   --out ./dossier_evidence
-
-# 或分阶段扫描
-python -m api_detective scan --base-url ... --api-key ... --model ...
-python -m api_detective report --evidence ./evidence
 ```
 
-> 💡 **拿到新的中转站 URL 想复测？** 一条命令即可：换掉 `--base-url` 和 `--api-key` 重跑 `dig`，报告会自动对比基线，帮你区分不同站点之间的对应关系。
+**③ 查看报告**
+
+打开 `./dossier_evidence/DOSSIER.md`——结论优先、逐条引用证据，判决评分 0–100。
+
+> 💡 **拿到新的中转站 URL 想复测？** 换掉 `--base-url` 和 `--api-key` 重跑 `dig` 即可。每次运行产出独立证据目录，方便横向对比多个站点的对应关系。
+
+### 分阶段运行（可选）
+
+```bash
+python -m api_detective scan --base-url ... --api-key ... --model ...   # 全阶段扫描
+python -m api_detective report --evidence ./evidence                   # 仅生成报告
+```
+
+各阶段可单独运行，计费调用量详见下表：
+
+| 阶段 | 模块 | 做什么 | 计费调用 |
+|---|---|---|---|
+| 0 | `recon` | 模型清单/计费表/套餐表/首页框架指纹/多站马甲线索 | 0 |
+| canary | `core` | 金丝雀探针：402/计费被挡自动降级 | 1 |
+| 1 | `identity` | 随机化多语言身份测谎（防内容路由） | ~13 |
+| 2 | `prompt_extract` | 20 种提示词提取技术武库 | ~20 |
+| 2b | `pliny` | 对抗性提取武库：NEW_PARADIGM/leetspeak/CCA/Crescendo/CoT 侧信道 | ~17 |
+| 2c | `dialect` | 厂商自我知识归属：问"只有自家模型才知道的家事" | ~8 |
+| 3 | `router_detect` | 内容路由探测器（A/B + Fisher 精确检验） | ~20 |
+| 4 | `tokenizer_probe` | token 计数器指纹（cl100k/o200k 基线比对） | ~5 |
+| 5 | `behavior` | 延迟画像 / 假流式 / t=0 确定性 / 错误措辞指纹 | ~15 |
+| 6 | `capability` | 全学科学力测验（数学/逻辑/代码/科学/医学/法律/社工） | ~19 |
+| 7 | `style` | 情绪/风格 12 维画像 | ~18 |
+| 8 | `met` | 模型同一性检验（string-kernel MET 简化实现） | ~48 |
+| — | `verdict` | 加权判决引擎 + 小白解释 | 0 |
+
+---
+
+## ⚙️ 工作原理
 
 `dig` 的流程：零成本指纹（错误矩阵 / 特征端点 / 定价表 / 自曝消息 / 姊妹站发现）→ 金丝雀 → 身份测谎 → 提示词武库（含二十问假设确认收网）→ 厂商归属 → MET → 供应链关系网 → `DOSSIER.md`（含全量证据清单）。计费被挡时自动降级并显式标注「证据不完整」。
 
@@ -103,7 +171,9 @@ flowchart LR
 
 评分不是玄学：每条线索带原始 JSON 留档，可复核、可反驳。
 
-### 与同类项目的差异化
+---
+
+## ⚔️ 对比同类项目
 
 系统研究了社区最知名的提示词提取 / 系统提示词档案项目，**吸收精华，补齐盲区**：
 
@@ -122,6 +192,12 @@ flowchart LR
 4. 🔀 **内容路由 A/B + Fisher 检验** —— 证明「什么问题给什么假身份」是系统性路由
 5. 💰 **经济学不可行性测算** —— 远低于官方成本的包月价，只有偷 key / 盗用 / 拼装三种解释
 6. ⚖️ **加权判决 + 本地留证** —— 直接产出可用于消费投诉的证据包
+
+### 方法论引用
+
+- **Model Equality Testing**（ICLR 2025, Stanford）—— MET 模块的理论基础
+- **Real Money, Fake Models: Deceptive Model Claims in Shadow APIs**（arXiv:2603.01919）—— 中转站审计的整体框架
+- **LLMmap** —— 黑盒指纹查询策略
 
 ---
 
@@ -188,6 +264,37 @@ dossier_evidence/
 以 OpenAI 兼容协议为主入口，同时内置 Anthropic Messages 与 Gemini 协议探针，可识别网关的多协议马甲。
 </details>
 
+<details>
+<summary><b>API Key 安全吗？</b></summary>
+Key 仅在本地使用、通过命令行参数传入，不会写入任何代码或配置文件；所有证据仅保存在你本地的 `--out` 目录，工具本身零遥测、零上传。
+</details>
+
+---
+
+## 🗺️ 路线图
+
+- [x] 身份测谎 / 提示词武库 / 厂商归属 / MET / 判决引擎
+- [x] `dig` 一键模式 → DOSSIER 总档案
+- [x] 三层注入模板提取 + 稳定性复测
+- [ ] Web UI 报告可视化（本地静态页）
+- [ ] 官方 API 基线库自动化同步
+- [ ] 多站点横向对比报告
+- [ ] 英文文档
+
+---
+
+## 🤝 参与贡献
+
+欢迎通过 Issue 和 PR 参与：
+
+1. Fork 本仓库
+2. 创建特性分支：`git checkout -b feature/amazing-feature`
+3. 提交更改：`git commit -m "feat: add amazing feature"`
+4. 推送分支：`git push origin feature/amazing-feature`
+5. 发起 Pull Request
+
+特别欢迎的方向：新的提示词提取技术、官方 API 基线数据、判决引擎权重调优建议、文档翻译。
+
 ---
 
 ## 🛡️ 使用须知与免责声明
@@ -201,7 +308,7 @@ dossier_evidence/
 
 ## 🌟 Star 历史
 
-如果这个工具帮你省了冤枉钱或避了坑，欢迎点个 Star ⭐
+如果这个工具帮你省了冤枉钱或避了坑，欢迎点个 Star ⭐ 让更多人看到
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/api-detective&type=Date)](https://star-history.com/#Dragon-01-you/api-detective&Date)
 
@@ -209,6 +316,8 @@ dossier_evidence/
 
 <div align="center">
 
-`AI中转站` · `API验真` · `假模型检测` · `DeepSeek` · `GPT中转` · `Claude中转` · `系统提示词提取` · `System Prompt Extraction` · `LLM Forensics` · `Model Fingerprinting` · `API Gateway Audit` · `大模型安全`
+**API Detective** — LLM relay API forensics toolkit
+
+`AI中转站` · `API验真` · `假模型检测` · `模型指纹` · `系统提示词提取` · `System Prompt Extraction` · `LLM Forensics` · `Model Fingerprinting` · `Model Equality Testing` · `API Gateway Audit` · `大模型安全` · `DeepSeek` · `GPT中转` · `Claude中转`
 
 </div>
