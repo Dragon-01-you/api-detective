@@ -32,7 +32,7 @@ def main():
             print(f"OK: {args.out} 1280x640 quality={q} "
                   f"{os.path.getsize(args.out)//1024}KB (<1MB)")
             return
-    print(f"⚠️ quality=60 仍超1MB，请换更简单的图或手动压缩")
+    print("⚠️ quality=60 仍超1MB，请换更简单的图或手动压缩")
 
 
 if __name__ == "__main__":
