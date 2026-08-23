@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "api-detective"
+description = "AI 中转站 API 验真取证工具：模型验真 · 系统提示词提取 · 上下游供应链溯源 | LLM relay API forensics toolkit"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Dragon-01-you" }]
+keywords = [
+    "llm", "api-security", "forensics", "openai-api", "deepseek",
+    "model-verification", "system-prompt", "prompt-extraction",
+    "ai-security", "fraud-detection", "cli-tool", "model-fingerprinting",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "openai",
+    "tiktoken",
+    "requests",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/Dragon-01-you/api-detective"
+Issues = "https://github.com/Dragon-01-you/api-detective/issues"
+
+[project.scripts]
+api-detective = "api_detective.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "api_detective.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["api_detective*"]
+
+[tool.ruff.lint]
+# CI 使用: ruff check . --select F,E9（真实错误）
+# 本地全量: ruff check .
+select = ["F", "E9"]

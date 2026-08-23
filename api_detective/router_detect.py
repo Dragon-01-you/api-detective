@@ -8,7 +8,6 @@ Fisher 精确检验给出统计显著性。
 """
 from __future__ import annotations
 
-import random
 
 from .core import Detective, msg_content, model_field
 
@@ -99,7 +98,6 @@ def _fisher_exact(a: int, b: int, c: int, d: int) -> float:
 
     denom = sum(p_of(x) for x in range(max(0, a + b + c - (a + b + c + d)),
                                        min(a + b, a + c) + 1)) or 1.0
-    observed = p_of(a) / denom
     # 单尾：>=a 的极端情形之和
     tail = sum(p_of(x) for x in range(a, min(a + b, a + c) + 1)) / denom
     return min(1.0, tail)

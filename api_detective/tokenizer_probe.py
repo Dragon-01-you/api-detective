@@ -9,7 +9,6 @@
 """
 from __future__ import annotations
 
-import statistics
 
 from .core import Detective
 

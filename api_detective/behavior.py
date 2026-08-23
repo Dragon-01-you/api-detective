@@ -44,7 +44,6 @@ def fake_stream_check(det: Detective, model: str | None = None) -> dict:
     ttft = s.get("ttft_s")
     if not intervals or not ttft:
         return {"error": s.get("error") or "no stream data", "raw": s}
-    body = [x for x in intervals if x > 0.5]
     mean_ms = statistics.mean(intervals) if intervals else 0
     # 倾泻特征：>80% 的 chunk 在 <5ms 间隔内到达，且 TTFT 占总时长 >90%
     burst_ratio = sum(1 for x in intervals if x < 5) / len(intervals)

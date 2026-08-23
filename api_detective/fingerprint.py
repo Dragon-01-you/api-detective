@@ -3,7 +3,6 @@
 本模块全部探测不需要计费额度，是 dig 模式的第一阶段。
 """
 import json
-import os
 import re
 import time
 import urllib.error

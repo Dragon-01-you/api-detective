@@ -11,7 +11,6 @@
 """
 from __future__ import annotations
 
-import random
 import re
 
 from .core import Detective, msg_content, msg_reasoning, model_field

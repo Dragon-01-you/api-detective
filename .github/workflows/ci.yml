@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt ruff
+
+      - name: Lint (ruff — errors only)
+        run: ruff check . --select F,E9
+
+      - name: Smoke test — CLI entrypoints
+        run: |
+          python -m api_detective --version
+          python -m api_detective scan --help > /dev/null
+          python -m api_detective dig --help > /dev/null
+          python -m api_detective report --help > /dev/null
+
+      - name: Smoke test — package imports
+        run: |
+          python -c "import api_detective; assert api_detective.__version__"
+          python -c "from api_detective import cli, core, verdict, dossier, unmask, behavior, router_detect"
+
+      - name: Smoke test — zero-cost recon against a dead endpoint
+        run: |
+          python -m api_detective scan \
+            --base-url http://127.0.0.1:9 \
+            --api-key sk-ci-smoke \
+            --model demo-model \
+            --phases recon \
+            --out /tmp/ci_evidence
+          test -f /tmp/ci_evidence/_final_results.json
+          test -f /tmp/ci_evidence/recon_summary.json

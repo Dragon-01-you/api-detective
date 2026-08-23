@@ -8,8 +8,11 @@
 
 *LLM relay API forensics — verify the model behind your API key, extract injected system prompts, and trace the upstream supply chain.*
 
+简体中文 | [English](README_EN.md)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![CI](https://github.com/Dragon-01-you/api-detective/actions/workflows/ci.yml/badge.svg)](https://github.com/Dragon-01-you/api-detective/actions/workflows/ci.yml)
 [![GitHub stars](https://img.shields.io/github/stars/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/network/members)
 [![GitHub issues](https://img.shields.io/github/issues/Dragon-01-you/api-detective)](https://github.com/Dragon-01-you/api-detective/issues)
@@ -44,8 +47,17 @@
 
 ---
 
+## 🎬 30 秒演示
+
+![API Detective 终端演示](assets/demo.gif)
+
+一次真实 `dig` 运行的浓缩回放：零成本指纹 → 金丝雀 → 揭面（厂商自认矩阵 / 系统提示词逐字命中）→ 判决引擎。
+
+---
+
 ## 📑 目录
 
+- [30 秒演示](#-30-秒演示)
 - [快速开始](#-快速开始)
 - [工作原理](#-工作原理)
 - [技术实现](#-采用了哪些技术实现)
@@ -77,6 +89,12 @@
 git clone https://github.com/Dragon-01-you/api-detective.git
 cd api-detective
 pip install -r requirements.txt
+```
+
+或直接安装为命令行工具（提供 `api-detective` 命令）：
+
+```bash
+pip install git+https://github.com/Dragon-01-you/api-detective.git
 ```
 
 **② 一键挖掘（推荐）**
@@ -276,24 +294,24 @@ Key 仅在本地使用、通过命令行参数传入，不会写入任何代码�
 - [x] 身份测谎 / 提示词武库 / 厂商归属 / MET / 判决引擎
 - [x] `dig` 一键模式 → DOSSIER 总档案
 - [x] 三层注入模板提取 + 稳定性复测
+- [x] CI 自动化测试（GitHub Actions，Python 3.10–3.13 矩阵）
+- [x] 英文文档（[README_EN.md](README_EN.md)）
 - [ ] Web UI 报告可视化（本地静态页）
 - [ ] 官方 API 基线库自动化同步
 - [ ] 多站点横向对比报告
-- [ ] 英文文档
 
 ---
 
 ## 🤝 参与贡献
 
-欢迎通过 Issue 和 PR 参与：
+欢迎通过 Issue 和 PR 参与，详见 [CONTRIBUTING.md](CONTRIBUTING.md)。提交前请跑通本地检查：
 
-1. Fork 本仓库
-2. 创建特性分支：`git checkout -b feature/amazing-feature`
-3. 提交更改：`git commit -m "feat: add amazing feature"`
-4. 推送分支：`git push origin feature/amazing-feature`
-5. 发起 Pull Request
+```bash
+ruff check . --select F,E9          # lint 必须通过
+python -m api_detective --version   # CLI 冒烟
+```
 
-特别欢迎的方向：新的提示词提取技术、官方 API 基线数据、判决引擎权重调优建议、文档翻译。
+**铁律**：严禁在任何提交中包含真实密钥、真实端点数据或可识别的站点信息——脱敏写法参考 `examples/relayx_case.md`。
 
 ---
 
