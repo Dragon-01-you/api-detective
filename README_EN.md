@@ -71,6 +71,8 @@ It's like buying a gold bar — the label says "999 pure gold", but you have no 
 
 A condensed replay of a real `dig` run: zero-cost fingerprinting → canary → unmasking (vendor confession matrix, verbatim system-prompt hits) → verdict.
 
+**Core capability matrix**: ✅ LLMmap pretrained fingerprint · ✅ Crypto signature verification (Claude thinking signature / OpenAI reasoning tokens) · ✅ 5-probe security audit · ✅ Softmax verdict engine v2 · ✅ Agent Skill distribution · ✅ Web UI local console · ✅ Multi-site cross-comparison · ✅ MET + Fisher statistical tests
+
 ---
 
 ## 📡 Public Intelligence Library (usable without installing)
@@ -204,7 +206,7 @@ Deliberately minimal stack: Python 3.10+, three core runtime dependencies (`open
 
 ---
 
-## 🧬 New Capabilities in Depth (v0.4)
+## 🧬 LLMmap Fingerprinting + Crypto Signatures + Baseline Diff + Security Audit + Softmax Verdict (v0.4/v0.5)
 
 ### 1. LLMmap Pretrained Fingerprint (fast pre-classification layer)
 
@@ -422,39 +424,4 @@ The key is only used locally, passed via CLI arguments — never written into co
 
 ## 🤝 Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Highlights:
-
-```bash
-pip install -r requirements.txt ruff
-ruff check . --select F,E9          # must pass
-python -m api_detective --version   # CLI smoke
-```
-
-Never commit real keys, real endpoint data, or identifiable site information — anonymize everything (see `examples/relayx_case.md` for the pattern).
-
----
-
-## 🛡️ Disclaimer
-
-- Use only against endpoints **you hold keys for**; never attack others' services
-- All evidence stays local; the tool uploads nothing
-- Output is technical analysis, not legal advice
-- Follow your local laws and regulations
-
----
-
-## 🌟 Star History
-
-If this tool saved you money or kept you from a scam, a Star ⭐ helps others find it
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/api-detective&type=Date)](https://star-history.com/#Dragon-01-you/api-detective&Date)
-
----
-
-<div align="center">
-
-**API Detective** — LLM relay API forensics toolkit
-
-`LLM Forensics` · `Model Fingerprinting` · `Model Equality Testing` · `System Prompt Extraction` · `API Gateway Audit` · `AI Relay Verification` · `Fraud Detection` · `OpenAI API` · `DeepSeek` · `Claude` · `Kimi` · `GLM`
-
-</div>
+See [CONTRIBUTING
