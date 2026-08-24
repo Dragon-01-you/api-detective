@@ -1,0 +1,28 @@
+# 这个 CITATION.cff 文件由 GitHub 渲染为 "Cite this repository" 按钮。
+# 如引用本工具或 intel 情报库，请使用以下信息；Zenodo DOI 在首次 Release 后追加。
+
+cff-version: 1.2.0
+title: api-detective
+message: >-
+  如果 API Detective 或其公开情报库对你的研究有帮助，请引用本仓库。
+  方法论对标: LLMmap (USENIX Security '25) / Model Equality Testing (ICLR 2025) /
+  Real Money, Fake Models (arXiv:2603.01919)。
+type: software
+authors:
+  - name: Dragon-01-you
+repository-code: "https://github.com/Dragon-01-you/api-detective"
+url: "https://github.com/Dragon-01-you/api-detective"
+abstract: >-
+  AI 中转站 API 验真取证工具：给任何 OpenAI 兼容端点做黑盒「验真体检」。
+  12+ 探针模块（LLMmap 预训练指纹 / 加密签名验证 / 内容路由 Fisher 检验 /
+  计费分词器指纹 / 三层注入模板提取 / 安全审计），输出 0-100 概率化判决
+  与小白可读的 DOSSIER 总档案。附机器可读的中转站欺诈特征公开情报库（intel/）。
+keywords:
+  - llm
+  - api-security
+  - forensics
+  - model-verification
+  - model-fingerprinting
+  - fraud-detection
+  - system-prompt-extraction
+license: MIT

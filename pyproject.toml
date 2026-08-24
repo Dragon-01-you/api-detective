@@ -34,6 +34,12 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[project.optional-dependencies]
+# LLMmap 预训练指纹分类器（USENIX Security '25）推理栈——未安装时优雅降级
+llmmap = ["torch", "transformers", "scipy", "numpy", "accelerate"]
+# Web UI 报告卡片 JPG 输出（SVG 卡片零依赖恒有）
+card = ["pillow"]
+
 [project.urls]
 Homepage = "https://github.com/Dragon-01-you/api-detective"
 Issues = "https://github.com/Dragon-01-you/api-detective/issues"

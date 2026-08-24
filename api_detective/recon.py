@@ -46,6 +46,7 @@ def recon(det: Detective) -> dict:
     try:
         models = [m.id for m in det.client.models.list()]
         out["models"] = models
+        out["llmmap_catalog_hits"] = _llmmap_hits(models)
     except Exception as e:  # noqa: BLE001
         out["models_error"] = str(e)[:300]
 
@@ -81,6 +82,28 @@ def recon(det: Detective) -> dict:
                              if k.lower() in ("server", "x-powered-by", "via",
                                               "cf-ray", "x-request-id")}
     return out
+
+
+def _llmmap_hits(models: list) -> list:
+    """目录模型与 LLMmap 52 模板库的交集（预训练指纹可识别的 SKU）。"""
+    try:
+        from .probes.llmmap_fingerprint import LLMMAP_SUPPORTED_MODELS
+    except ImportError:
+        return []
+    known = {m.lower() for m in LLMMAP_SUPPORTED_MODELS}
+    hits = []
+    for m in models or []:
+        ml = (m or "").lower()
+        base = ml.split("/")[-1]
+        if ml in known or base in known:
+            hits.append(m)
+        else:  # 短名匹配（目录里写 qwen2-7b，库里是 Qwen/Qwen2-7B-Instruct）
+            for k in known:
+                kb = k.split("/")[-1]
+                if base and (base in kb or kb.startswith(base)):
+                    hits.append(f"{m} (≈{k})")
+                    break
+    return sorted(set(hits))[:40]
 
 
 def _scan_interesting(html: str) -> list:

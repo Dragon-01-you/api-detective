@@ -1,0 +1,42 @@
+{
+  "name": "case_single_backend_rebadge",
+  "description": "2026-08 真实复测案件（脱敏）：多品牌 SKU 对同一身份题逐字同答 + usage 完全一致 + 内容路由 + cl100k 自算计费 + 虚挂 SKU + 不可行定价。预期：确证贴牌档（实锤级证据齐备）。",
+  "data": {
+    "identity": {
+      "self_claim_counts": {"MiniMax": 5},
+      "top_canned": [["我是 MiniMax-M3，由 MiniMax 开发，知识截止时间为 2026 年 1 月。", 5]],
+      "cot_leak_count": 0
+    },
+    "router_detect": {
+      "verdict": "检出内容路由",
+      "identity_reroute_rate": 1.0,
+      "control_reroute_rate": 0.0,
+      "fisher_p": 0.0005,
+      "identity_answer_clustered": true
+    },
+    "crypto_signature": {
+      "evidence": [
+        {"id": "reasoning_token_anomaly", "pass": false,
+         "finding": "reasoning token 计数固定不变（21/21/21），与问题难度无关"}
+      ]
+    },
+    "tokenizer": {"counter_verdict": "cl100k"},
+    "spec": {
+      "context_window_anomaly": null,
+      "price_anomaly": "¥4/天无限量 vs 官方成本 ¥10-20/天"
+    },
+    "unmask": {
+      "verdict": {
+        "single_backend_suspect": {"deepseek-v4-flash": "MiniMax", "deepseek-v4-pro": "MiniMax", "glm-5.2": "MiniMax"},
+        "phantom_skus": ["deepseek-v4"]
+      },
+      "vendor_confessions": {}
+    }
+  },
+  "expect": {
+    "score_max": 25,
+    "tier_prefix": "确证贴牌",
+    "inconclusive": false,
+    "must_clues": ["foreign_self_id", "canned_answers", "content_router", "gateway_counter", "price_anomaly", "unmask_single_backend", "unmask_phantom_skus"]
+  }
+}

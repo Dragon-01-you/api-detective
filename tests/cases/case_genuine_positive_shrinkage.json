@@ -1,0 +1,58 @@
+{
+  "name": "case_genuine_positive_shrinkage",
+  "description": "全正向案件（官方端点特征）：DeepSeek 自认 ×6 + 厂商家谱归属 + LLMmap 同厂最近邻 + reasoning 合理 + 安全审计全过 + 基线 MATCH + MET 同源。覆盖率 0.59 未满 → 非对称收缩应阻止「正品」越级（正向证据按覆盖率收缩），落入「大体可信」档。",
+  "data": {
+    "identity": {
+      "self_claim_counts": {"DeepSeek": 6},
+      "top_canned": [],
+      "cot_leak_count": 0
+    },
+    "dialect": {
+      "top_vendor": "DeepSeek",
+      "confidence": 0.8,
+      "vendor_scores": {"DeepSeek": 6, "Kimi": 0}
+    },
+    "llmmap": {
+      "available": true,
+      "brand_match": true,
+      "claimed_in_pool": true,
+      "claimed_model": "deepseek-chat",
+      "top1": {"model": "deepseek-ai/DeepSeek-V3", "distance": 35},
+      "ranking": [
+        {"model": "deepseek-ai/DeepSeek-V3", "distance": 35},
+        {"model": "Qwen/Qwen2.5-7B-Instruct", "distance": 88}
+      ]
+    },
+    "crypto_signature": {
+      "evidence": [
+        {"id": "reasoning_token_plausible", "pass": true,
+         "finding": "reasoning token 随难度变化"}
+      ]
+    },
+    "security_audit": {
+      "findings": [
+        {"name": "prompt_injection", "risk": "none", "detail": "无注入痕迹", "layman": "未检出注入"},
+        {"name": "sse_integrity", "risk": "none", "detail": "流完整", "layman": "流式完整"},
+        {"name": "key_leak", "risk": "none", "detail": "无泄露", "layman": "无泄露"}
+      ]
+    },
+    "baseline_compare": {"verdict": "MATCH", "total_deviation": 0.08},
+    "met": {
+      "model_b": "deepseek-reasoner",
+      "same_distribution": true,
+      "cross_similarity": 0.91,
+      "within_similarity": 0.9
+    },
+    "behavior": {
+      "fake_stream": {},
+      "determinism": {"exact_match": true}
+    }
+  },
+  "expect": {
+    "score_min": 65,
+    "score_max": 84,
+    "tier_prefix": "大体可信",
+    "inconclusive": false,
+    "must_clues": ["vendor_attribution_ok", "llmmap_match", "reasoning_token_plausible", "sec_clean", "baseline_match", "met_same"]
+  }
+}

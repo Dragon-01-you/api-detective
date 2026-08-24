@@ -36,11 +36,50 @@ jobs:
           python -m api_detective scan --help > /dev/null
           python -m api_detective dig --help > /dev/null
           python -m api_detective report --help > /dev/null
+          python -m api_detective add-model --help > /dev/null
+          python -m api_detective web --help > /dev/null
+          python -m api_detective baseline --help > /dev/null
 
       - name: Smoke test — package imports
         run: |
           python -c "import api_detective; assert api_detective.__version__"
           python -c "from api_detective import cli, core, verdict, dossier, unmask, behavior, router_detect"
+          python -c "from api_detective import webapp, baseline_compare"
+          python -c "from api_detective.probes import llmmap_fingerprint, crypto_signature, security_audit"
+
+      - name: Unit test — verdict engine v2 (category normalization + softmax)
+        run: |
+          python - <<'EOF'
+          from api_detective.verdict import build_verdict
+          v = build_verdict({})
+          assert v['inconclusive'] and v['tier'].startswith('证据不足'), v
+          v2 = build_verdict({
+            'llmmap': {'available': True, 'brand_match': False, 'claimed_in_pool': True,
+                       'top1': {'model': 'Qwen/Qwen2-7B-Instruct', 'distance': 30},
+                       'ranking': [{'model': 'Qwen/Qwen2-7B-Instruct', 'distance': 30}]},
+            'identity': {'self_claim_counts': {'Qwen': 6}, 'top_canned': [], 'cot_leak_count': 0},
+            'crypto_signature': {'evidence': [
+                {'id': 'thinking_signature_missing', 'pass': False,
+                 'finding': '声称 Claude 却无合法 thinking signature'}]},
+          })
+          assert v2['score'] < 45 and not v2['inconclusive'], v2
+          v3 = build_verdict({'llmmap': {'available': False, 'reason': 'skip'}})
+          assert 'llmmap_fingerprint' not in v3['category_scores'], v3
+          print('verdict v2 tests passed')
+          EOF
+
+      - name: Regression benchmark — verdict engine on historical cases
+        run: python tests/run_regression.py
+
+      - name: Smoke test — LLMmap graceful degradation (no torch in CI)
+        run: |
+          python - <<'EOF'
+          from api_detective.probes.llmmap_fingerprint import llmmap_status, LLMMAP_SUPPORTED_MODELS
+          st = llmmap_status()
+          assert st['ready'] is False  # CI 不装 torch → 必须优雅降级
+          assert len(LLMMAP_SUPPORTED_MODELS) == 52
+          print('llmmap degradation OK:', st['deps_ok'], st['model_path'])
+          EOF
 
       - name: Smoke test — zero-cost recon against a dead endpoint
         run: |

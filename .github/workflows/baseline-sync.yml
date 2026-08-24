@@ -1,0 +1,69 @@
+name: Baseline Sync
+
+# 官方基线库自动化同步（路线图项）
+# 每周一 08:00 (UTC) 用官方免费额度刷新 baselines/*.json
+# 前提: 仓库 Secrets 配置了官方端点凭据（未配置时自动跳过，不消耗额度）
+#   OFFICIAL_BASE_URL  官方 OpenAI 兼容端点（如 https://api.openai.com/v1）
+#   OFFICIAL_API_KEY   官方 Key（免费额度即可，每次刷新约 20 次调用）
+#   BASELINE_MODELS    要刷新的模型名列表（JSON 数组，如 ["gpt-4o"]）
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+jobs:
+  refresh-baselines:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check credentials
+        id: creds
+        run: |
+          if [ -z "${{ secrets.OFFICIAL_BASE_URL }}" ] || [ -z "${{ secrets.OFFICIAL_API_KEY }}" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "[skip] OFFICIAL_BASE_URL / OFFICIAL_API_KEY 未配置——跳过基线刷新"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Refresh baselines
+        if: steps.creds.outputs.ready == 'true'
+        env:
+          OFFICIAL_BASE_URL: ${{ secrets.OFFICIAL_BASE_URL }}
+          OFFICIAL_API_KEY: ${{ secrets.OFFICIAL_API_KEY }}
+          BASELINE_MODELS: ${{ secrets.BASELINE_MODELS }}
+        run: |
+          MODELS=$(echo "${BASELINE_MODELS:-[\"gpt-4o\"]}" | python -c "import json,sys; print(' '.join(json.load(sys.stdin)))")
+          for m in $MODELS; do
+            echo "[*] refreshing baseline: $m"
+            python -m api_detective baseline --generate "$m" \
+              --base-url "$OFFICIAL_BASE_URL" --api-key "$OFFICIAL_API_KEY" \
+              --out ./baselines || echo "[!] $m 刷新失败（跳过）"
+          done
+
+      - name: Commit updated baselines
+        if: steps.creds.outputs.ready == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add baselines/*.json
+          if git diff --cached --quiet; then
+            echo "[*] 基线无变化"
+          else
+            git commit -m "chore(baselines): weekly auto-refresh [skip ci]"
+            git push
+          fi

@@ -1,0 +1,42 @@
+{
+  "name": "case_edge_band_mixed",
+  "description": "边缘分带案件（40-70 分）：罐头答案（-2）与正向厂商归属（+1）互抵的 identity + 近邻异厂模板（-2）+ 合理 reasoning token（+1）。应落入「可疑」档且 edge_case_note 非空（指认最分裂维度）。",
+  "data": {
+    "identity": {
+      "self_claim_counts": {},
+      "top_canned": [["（话术模板甲）", 4]],
+      "cot_leak_count": 0
+    },
+    "dialect": {
+      "top_vendor": "DeepSeek",
+      "confidence": 0.55,
+      "vendor_scores": {"DeepSeek": 5, "Kimi": 1}
+    },
+    "llmmap": {
+      "available": true,
+      "brand_match": null,
+      "claimed_in_pool": false,
+      "claimed_model": "deepseek-v4-flash",
+      "top1": {"model": "Qwen/Qwen2.5-7B-Instruct", "distance": 28},
+      "ranking": [
+        {"model": "Qwen/Qwen2.5-7B-Instruct", "distance": 28},
+        {"model": "mistralai/Mistral-7B-Instruct-v0.2", "distance": 51}
+      ],
+      "close_foreign_template": "Qwen/Qwen2.5-7B-Instruct"
+    },
+    "crypto_signature": {
+      "evidence": [
+        {"id": "reasoning_token_plausible", "pass": true,
+         "finding": "reasoning token 随难度变化（12/48/213）"}
+      ]
+    }
+  },
+  "expect": {
+    "score_min": 45,
+    "score_max": 64,
+    "tier_prefix": "可疑",
+    "inconclusive": false,
+    "edge_note": true,
+    "must_clues": ["canned_answers", "vendor_attribution_ok", "llmmap_close_foreign", "reasoning_token_plausible"]
+  }
+}

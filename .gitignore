@@ -20,6 +20,10 @@ dossier_evidence/
 *_evidence/
 *.har
 
+# Web UI 运行产物（报告目录含用户 API 数据；基线生成的原始运行记录不入库）
+reports/
+baselines/_runs/
+
 # 编辑器/系统
 .DS_Store
 .idea/

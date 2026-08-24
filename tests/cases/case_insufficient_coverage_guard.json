@@ -1,0 +1,20 @@
+{
+  "name": "case_insufficient_coverage_guard",
+  "description": "覆盖率保护案件：仅零成本侦察数据（无对话类证据）。判决引擎必须触发「证据不足」保护——防止只跑 recon 就给出高分假阳性（v2 设计目标之一）。",
+  "data": {
+    "fingerprint": {
+      "framework_guess": ["one-api"],
+      "red_flags": [],
+      "sibling_sites": []
+    },
+    "recon": {
+      "models": 8,
+      "owned_by_vendors": ["deepseek", "kimi", "z-ai"]
+    }
+  },
+  "expect": {
+    "inconclusive": true,
+    "tier_prefix": "证据不足",
+    "n_clues_max": 0
+  }
+}

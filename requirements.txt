@@ -1,3 +1,10 @@
+# 核心依赖（刻意保持极简——3 个运行时依赖）
 openai
 tiktoken
 requests
+
+# ---- 可选依赖（按功能启用，未安装时对应探针优雅降级，不影响其他模块）----
+# LLMmap 预训练指纹（probes/llmmap_fingerprint.py）:
+#   pip install -r requirements-llmmap.txt
+# Web UI 报告卡片 JPG 输出（webapp.py，SVG 卡片零依赖恒有）:
+#   pillow

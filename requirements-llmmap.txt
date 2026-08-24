@@ -1,0 +1,10 @@
+# LLMmap 预训练指纹分类器推理栈（可选安装）
+# 启用: pip install -r requirements-llmmap.txt
+# 并配置预训练模型: export LLMMAP_MODEL_PATH=<LLMmap仓库>/data/pretrained_models/default
+# 未安装时: dig 自动跳过该阶段，其余 10+ 探针模块照常工作
+# 首次推理会从 HuggingFace 拉取 multilingual-e5-large-instruct 嵌入模型（~2GB）
+torch
+transformers
+scipy
+numpy
+accelerate

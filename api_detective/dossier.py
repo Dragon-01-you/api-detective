@@ -52,11 +52,57 @@ def generate_dossier(results: dict, evidence_dir: str) -> str:
         a("> 历史案件（2026-08 raw/raw3/raw4）已确证该类站点存在贴牌与路由欺诈。")
         a("> 补充可用 API key 后重跑 dig 以获得完整判决。")
     if v and not incomplete:
-        a(f"- **判决**: {v.get('tier', '?')}（得分 {v.get('score', '?')}/100）")
+        a(f"- **判决**: {v.get('tier', '?')}（得分 {v.get('score', '?')}/100，"
+          f"P(正品)={v.get('p_genuine', '?')}，覆盖率 "
+          f"{round((v.get('coverage') or 0) * 100)}%）")
     st = sc.get("stats", {})
     if st:
         a(f"- **关系网**: {st.get('节点数', 0)} 节点 / 确证边 {st.get('确证边', 0)} / 高置信边 {st.get('高置信边', 0)}")
     a("")
+
+    # ---- 新增探针速览（v0.4）----
+    lm = results.get("llmmap") or {}
+    cs = results.get("crypto_signature") or {}
+    sa = results.get("security_audit") or {}
+    bc = results.get("baseline_compare") or {}
+    if lm.get("available") or cs.get("evidence") or sa.get("findings") or bc:
+        a("## 〇b、进阶探针速览（v0.4：LLMmap 指纹 / 加密签名 / 安全审计 / 基线比对）")
+        a("")
+        if lm.get("available"):
+            a("### LLMmap 预训练指纹（52 模板最近邻）")
+            a("")
+            a("```text")
+            a(lm.get("ranking_text", ""))
+            a("```")
+            a(f"- 声称 `{lm.get('claimed_model')}` / 最近邻品牌 `{lm.get('top1_brand')}`"
+              f" → {'**同厂**' if lm.get('brand_match') else '**不同厂（贴牌线索）**'}")
+            a("")
+        elif lm:
+            a(f"- LLMmap 未启用：{lm.get('reason', '')[:120]}")
+            a("")
+        if cs.get("evidence"):
+            a("### 加密签名验证")
+            a("")
+            for ev in cs["evidence"]:
+                mark = "✓" if ev.get("pass") else ("?" if ev.get("inconclusive") else "✗")
+                a(f"- {mark} `{ev.get('id')}`: {ev.get('finding', '')[:160]}")
+            a("")
+        if sa.get("findings"):
+            a("### 安全审计（独立查询家族）")
+            a("")
+            a("| 探针 | 风险 | 发现 |")
+            a("|---|---|---|")
+            for f in sa["findings"]:
+                a(f"| {f.get('name')} | {f.get('risk')} | {f.get('detail', '')[:100]} |")
+            a("")
+        if bc:
+            a("### 官方基线比对")
+            a("")
+            a(f"- 判定: **{bc.get('verdict')}**（总偏离度 {bc.get('total_deviation')}，"
+              f"硬指标错位 {bc.get('hard_mismatches', 0)} 项）")
+            for d in bc.get("dimensions") or []:
+                a(f"  - {d['dimension']}: {d['value']} → 偏离 {d['deviation']}")
+            a("")
 
     a("## 〇、揭面速览（unmask · 模型真身与系统提示词）")
     a("")
@@ -212,7 +258,13 @@ def generate_dossier(results: dict, evidence_dir: str) -> str:
 
     a("## 五、结论与建议")
     a("")
+    if v.get("edge_case_note"):
+        a(f"> {v['edge_case_note']}")
+        a("")
     for c in (v.get("clues") or [])[:8]:
-        a(f"- [{c.get('category', '?')}] {c.get('text', '')}")
+        a(f"- [{c.get('category', '?')}] {c.get('finding', '')}")
     a("")
+    if v.get("disclaimer"):
+        a(f"> {v['disclaimer']}")
+        a("")
     return "\n".join(lines)

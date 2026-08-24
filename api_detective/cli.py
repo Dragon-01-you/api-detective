@@ -212,6 +212,20 @@ def cmd_dig(args) -> None:
             print("[+] 系统提示词逐字命中！")
         if uvd.get("single_backend_suspect"):
             print(f"[!] 单后端贴牌嫌疑: {uvd['single_backend_suspect']}")
+        # LLMmap 预训练指纹：快速预分类层（可选依赖，未装时优雅降级）
+        if not getattr(args, "no_llmmap", False):
+            try:
+                from .probes.llmmap_fingerprint import llmmap_fingerprint
+                print("[*] dig/3a LLMmap 预训练指纹（8 查询 × 52 模板）...")
+                results["llmmap"] = llmmap_fingerprint(det)
+                lm = results["llmmap"]
+                if lm.get("available") and lm.get("ranking"):
+                    print(f"[+] LLMmap 最近邻: {lm['top1']['model']} "
+                          f"(distance={lm['top1']['distance']})")
+                elif not lm.get("available"):
+                    print(f"[-] LLMmap 跳过: {lm.get('reason', '')[:100]}")
+            except Exception as e:  # noqa: BLE001
+                print(f"[-] LLMmap 异常跳过: {e}")
         print("[*] dig/3b 身份 → 提示词武库 → 厂商归属 ...")
         results["identity"] = identity_battery(det)
         if left():
@@ -228,6 +242,30 @@ def cmd_dig(args) -> None:
             results["met"] = met_compare(det, args.model, args.compare_model)
         if left():
             results["router_detect"] = router_detect(det)
+        # 加密签名验证（Anthropic thinking signature / OpenAI reasoning tokens）
+        if left():
+            try:
+                from .probes.crypto_signature import crypto_signature_probe
+                print("[*] dig/4b 加密签名验证（thinking signature / reasoning tokens）...")
+                results["crypto_signature"] = crypto_signature_probe(det)
+                cs = results["crypto_signature"]
+                for ev_ in cs.get("evidence", []):
+                    print(f"[{'+' if ev_.get('pass') else '!'}] {ev_.get('name')}: "
+                          f"{ev_.get('finding', '')[:100]}")
+            except Exception as e:  # noqa: BLE001
+                print(f"[-] 加密签名探针跳过: {e}")
+        # 安全审计（注入/截断/工具改写/SSE/Key泄露——独立查询家族）
+        if left() and not getattr(args, "no_security", False):
+            try:
+                from .probes.security_audit import security_audit
+                print("[*] dig/4c 安全审计（注入/截断/工具改写/SSE/Key泄露）...")
+                results["security_audit"] = security_audit(det)
+                sa = results["security_audit"].get("findings", [])
+                for f_ in sa:
+                    if f_.get("risk") in ("high", "medium"):
+                        print(f"[!] {f_.get('name')}: {f_.get('detail', '')[:100]}")
+            except Exception as e:  # noqa: BLE001
+                print(f"[-] 安全审计跳过: {e}")
     else:
         print(f"[!] 计费被挡，跳过对话类阶段: {str(canary.get('body'))[:80]}")
 
@@ -244,6 +282,18 @@ def cmd_dig(args) -> None:
         verdict_data["spec"] = vd
     except Exception:
         pass
+    # 官方基线比对（--baseline gpt-4o 时启用，输出 FRAUD_DETECTED/SUSPICIOUS/INCONCLUSIVE）
+    if getattr(args, "baseline", None):
+        try:
+            from .baseline_compare import compare_with_baseline
+            print(f"[*] dig/6 官方基线比对: {args.baseline} ...")
+            results["baseline_compare"] = compare_with_baseline(
+                results, args.baseline)
+            bc = results["baseline_compare"]
+            print(f"[{'!' if bc.get('verdict') == 'FRAUD_DETECTED' else '*'}] "
+                  f"基线判定: {bc.get('verdict')}（总偏离度 {bc.get('total_deviation')}）")
+        except Exception as e:  # noqa: BLE001
+            print(f"[-] 基线比对跳过: {e}")
     results["verdict"] = build_verdict(verdict_data)
     det.ev.save("_final_results", results)
 
@@ -257,6 +307,54 @@ def cmd_dig(args) -> None:
                       "billable_calls": det.billable_calls},
                      ensure_ascii=False, indent=2))
     print(f"[*] 总档案: {out}")
+
+
+def cmd_add_model(args) -> None:
+    """扩展 LLMmap 新模型模板（封装 add_new_template.py）。"""
+    from .probes.llmmap_fingerprint import add_model_template
+    print(f"[*] 为 LLMmap 添加新模型模板: {args.model_name} (type={args.llm_type})")
+    r = add_model_template(args.model_name, args.llm_type,
+                           num_prompt_confs=args.num_prompt_confs,
+                           llmmap_path=args.llmmap_path,
+                           prompt_conf_path=args.prompt_conf_path)
+    print(json.dumps(r, ensure_ascii=False, indent=2)[:3000])
+    if r.get("ok"):
+        print(f"[+] 模板已写入。下次 dig 即可识别 {args.model_name}。")
+    else:
+        print("[!] 失败。请检查 LLMmap 仓库完整性 / API Key 环境变量。")
+
+
+def cmd_web(args) -> None:
+    """本地 Web UI（FastAPI + 静态页，零遥测，仅监听 localhost）。"""
+    from .webapp import run_webapp
+    run_webapp(port=args.port, reports_dir=args.reports)
+
+
+def cmd_baseline(args) -> None:
+    """官方基线生成/比对。"""
+    from .baseline_compare import generate_baseline, compare_with_baseline
+    if args.generate:
+        if not (args.base_url and args.api_key):
+            raise SystemExit("--generate 需要同时提供 --base-url 与 --api-key（官方端点）")
+        print(f"[*] 用官方端点生成基线: {args.generate} ...")
+        out = generate_baseline(args.generate, args.base_url, args.api_key,
+                                out_dir=args.out)
+        print(f"[+] 基线已保存: {out}")
+    elif args.compare:
+        evidence_dir, baseline_name = args.compare
+        import json as _json
+        path = os.path.join(evidence_dir, "_final_results.json")
+        if not os.path.isfile(path):
+            raise SystemExit(f"找不到 {path}——请先用 dig 生成证据目录")
+        with open(path, encoding="utf-8") as f:
+            results = _json.load(f)
+        try:
+            r = compare_with_baseline(results, baseline_name)
+        except FileNotFoundError as e:
+            raise SystemExit(str(e))
+        print(_json.dumps(r, ensure_ascii=False, indent=2))
+    else:
+        raise SystemExit("需要 --generate MODEL 或 --compare EVIDENCE_DIR BASELINE")
 
 
 def main() -> None:
@@ -297,7 +395,40 @@ def main() -> None:
                    help="揭面阶段最多扫描的 SKU 数（echo 矩阵规模）")
     d.add_argument("--budget", type=int, default=None, help="最大计费调用数")
     d.add_argument("--out", default="./dossier_evidence")
+    d.add_argument("--baseline", default=None,
+                   help="官方基线模型名（如 gpt-4o），启用基线比对严格模式")
+    d.add_argument("--no-llmmap", action="store_true",
+                   help="跳过 LLMmap 预训练指纹阶段")
+    d.add_argument("--no-security", action="store_true",
+                   help="跳过安全审计阶段（注入/截断/工具改写/SSE/Key泄露）")
     d.set_defaults(func=cmd_dig)
+
+    am = sub.add_parser("add-model",
+                        help="为 LLMmap 指纹库扩展新模型模板（需本地 LLMmap 仓库）")
+    am.add_argument("model_name", help="新模型名（如 gpt-4.1 / Qwen/Qwen3-8B）")
+    am.add_argument("--llm-type", type=int, default=1,
+                    choices=[0, 1, 2],
+                    help="后端类型: 0=HuggingFace 1=OpenAI 2=Anthropic")
+    am.add_argument("--num-prompt-confs", type=int, default=100)
+    am.add_argument("--llmmap-path", default=None,
+                    help="预训练模型目录（默认 LLMMAP_MODEL_PATH 或自动探测）")
+    am.add_argument("--prompt-conf-path", default=None)
+    am.set_defaults(func=cmd_add_model)
+
+    w = sub.add_parser("web", help="本地 Web UI 报告可视化（零遥测，仅监听 localhost）")
+    w.add_argument("--port", type=int, default=8501)
+    w.add_argument("--reports", default="./reports")
+    w.set_defaults(func=cmd_web)
+
+    bl = sub.add_parser("baseline", help="生成/比对官方基线（需官方 API Key）")
+    bl.add_argument("--generate", metavar="MODEL", default=None,
+                    help="用官方端点生成基线: --generate gpt-4o --base-url ... --api-key ...")
+    bl.add_argument("--compare", nargs=2, metavar=("EVIDENCE_DIR", "BASELINE"),
+                    help="比对: --compare ./dossier_evidence gpt-4o")
+    bl.add_argument("--base-url", default=None, help="官方端点（--generate 时必填）")
+    bl.add_argument("--api-key", default=None, help="官方 Key（--generate 时必填）")
+    bl.add_argument("--out", default="./baselines")
+    bl.set_defaults(func=cmd_baseline)
 
     args = ap.parse_args()
     args.func(args)

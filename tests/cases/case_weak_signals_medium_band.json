@@ -1,0 +1,33 @@
+{
+  "name": "case_weak_signals_medium_band",
+  "description": "仅弱信号（-1 级）的中间地带案件：假流式 + 弱对抗命中 + 低危安全发现 + MET 分布差异 + 身份聚簇。无实锤级证据 → 非对称温和收缩（rate=0.6）应把分数压在「高度可疑」档而非确证档。",
+  "data": {
+    "pliny": {"strong_hits": 1, "max_score": 3},
+    "router_detect": {
+      "verdict": null,
+      "identity_answer_clustered": true
+    },
+    "security_audit": {
+      "findings": [
+        {"name": "sse_integrity", "risk": "low", "detail": "SSE 偶发乱序", "layman": "流式事件偶发乱序"}
+      ]
+    },
+    "met": {
+      "model_b": "kimi-k3",
+      "same_distribution": false,
+      "cross_similarity": 0.31,
+      "within_similarity": 0.78
+    },
+    "behavior": {
+      "fake_stream": {"fake_stream_suspect": true},
+      "determinism": {"exact_match": true}
+    }
+  },
+  "expect": {
+    "score_min": 25,
+    "score_max": 44,
+    "tier_prefix": "高度可疑",
+    "inconclusive": false,
+    "must_clues": ["pliny_weak_hit", "clustered_identity", "met_diff", "fake_stream"]
+  }
+}

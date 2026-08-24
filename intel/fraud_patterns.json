@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-08-24",
+  "title": "中转站欺诈行为特征库（Relay Fraud Pattern Intelligence）",
+  "description": "从真实取证案件（2026-06 至 2026-08）中提炼的机器可读欺诈特征。每条特征均来自实锤或强旁证级证据，附判定方法与消费方式。本库可独立于工具使用：人工核对 / 接入风控规则 / 学术引用均可。",
+  "consumption": {
+    "no_install": "本文件为零依赖纯数据，可直接阅读或被任何语言解析",
+    "with_tool": "python -m api_detective dig 会自动在探针中应用这些特征（见 api_detective/fingerprint.py / verdict.py）",
+    "contribution": "欢迎通过 PR 补充新特征（附可复现判定方法与证据等级）"
+  },
+  "evidence_levels": {
+    "确证": "密码学/逐字泄露/统计显著（p<0.001）级证据，造假方须真跑真模型才能翻案",
+    "强旁证": "多维度独立信号互锁，单一信号可解释但组合不可",
+    "信号": "单独出现时仅提示需要进一步取证"
+  },
+  "pattern_groups": [
+    {
+      "id": "fake_sku_naming",
+      "name": "自造 SKU 命名法",
+      "severity": "强旁证",
+      "description": "官方 API 从不使用这些命名模式；出现即高度可疑",
+      "patterns": [
+        {"regex": "gpt-[0-9]+\\.[0-9]+-(sol|terra|luna|nova|apex)", "match_example": "gpt-5.6-sol / gpt-5.6-terra / gpt-5.6-luna", "reason": "OpenAI 官方 SKU 无「行星后缀」命名法，系站点自造"},
+        {"regex": "(deepseek|glm|kimi|minimax)-[a-z0-9\\.]+-(pro|flash|turbo|max|ultra)", "match_example": "deepseek-v4-flash", "reason": "营销后缀堆叠；官方 API 命名极少同时带版本号+后缀"},
+        {"regex": ".*(无限量|unlimited|日卡|周卡).*", "context": "套餐名而非模型名", "reason": "以时长卡+无限量包装低价，经济学上唯一盈利解是换便宜后端"}
+      ],
+      "source_case": "GPT-Shell 站（目录挂 gpt-5.6-sol/terra/luna 等自造 SKU）；yunjunet 站 ¥4 无限量日卡"
+    },
+    {
+      "id": "upstream_namespace_leak",
+      "name": "owned_by 上游命名空间泄露",
+      "severity": "强旁证",
+      "description": "/v1/models 的 owned_by 字段暴露真实货源；官方直连站不会混挂多家供应商命名空间",
+      "patterns": [
+        {"signal": "owned_by=nvidia 出现在非 NVIDIA 模型上", "match_example": "step-3.7-flash 与 minimax-m3 的 owned_by 均为 nvidia", "reason": "NVIDIA NIM 命名空间 → 上游是 NIM 聚合接口而非厂商官方"},
+        {"signal": "同一站点 owned_by 混挂 ≥4 家供应商", "match_example": "deepseek/nvidia/z-ai/kimi/qwen 五家混挂", "reason": "「XX 官方直连」话术与货源目录自相矛盾"}
+      ],
+      "detection": "GET /v1/models 后对 data[].owned_by 去重计数（零成本，recon 阶段即可完成）",
+      "source_case": "yunjunet 站 2026-08 复测：10 个 SKU 混挂 5 家命名空间"
+    },
+    {
+      "id": "single_backend_rebadge",
+      "name": "单后端换皮（多 SKU 同芯）",
+      "severity": "确证",
+      "description": "多个「不同品牌」SKU 对同一问题返回逐字相同的自认答案 + 完全相同的 usage 计数",
+      "patterns": [
+        {"signal": "verbatim_identical_answer", "detail": "≥2 个不同品牌 SKU 对身份问题返回逐字相同回答（含相同知识截止日期）"},
+        {"signal": "identical_usage_across_sku", "detail": "不同 SKU 的 prompt_tokens 完全一致 → 共用同一套注入系统提示词（同体积）+ 同一后端"},
+        {"signal": "usage_echo", "detail": "身份问题 prompt_tokens 远大于可见输入（如 43→244），差值即隐藏注入块体积"}
+      ],
+      "detection": "对每个 SKU 发同一句身份问题，比较 content 逐字相等与 usage.prompt_tokens 相等",
+      "source_case": "yunjunet 站 2026-08-24 复测：deepseek-v4-flash / deepseek-v4-pro / deepseek-chat / glm-5.2 / minimax-m3 五个 SKU 全部返回逐字相同的「我是 MiniMax-M3…知识截止 2026 年 1 月」且 usage 均为 244/21/265 —— 单后端换皮实锤",
+      "note": "step-3.7-flash 返回真实 StepFun 自认（知识截止 2024-06）且 usage 不同（43/161）→ 该 SKU 未贴皮，同站真假混卖是常态"
+    },
+    {
+      "id": "identity_gag_order",
+      "name": "身份封口令（注入层黑名单）",
+      "severity": "确证",
+      "description": "系统提示词中包含禁止自曝真实身份的黑名单指令；通过思维链复述或对抗提取可获得逐字原文",
+      "patterns": [
+        {"regex": "不得回答 (MiniMax|minimax|NVIDIA|上游模型|底层模型|内部路由)", "surface": "reasoning_content / 系统提示词提取", "reason": "封口名单本身就是底牌——黑名单里列的厂商就是真实上游候选"},
+        {"regex": "必须只回答[：:].*(本站|官方|助手)", "surface": "reasoning_content", "reason": "统一口径话术模板"},
+        {"signal": "refusal_with_reasoning", "detail": "content 拒答但 reasoning_content 里讨论了自己「没有身份信息」→ 模型被剥掉了真实身份卡", "source_case": "yunjunet 站 kimi-k3：content 称无法确认身份，思维链自述「系统提示说我是官方模型身份自述助手。但我没有具体模型名称」"}
+      ],
+      "detection": "推理模型（带 reasoning_content 的 SKU）问身份题，读思维链而非最终回答——网关改得了 model 字段，改不了思考过程",
+      "source_case": "yunjunet 站（思维链泄露封口令全文，见 examples/yunjunet_case.md E1/E2）"
+    },
+    {
+      "id": "content_routing",
+      "name": "内容路由欺诈（按问题语义分流）",
+      "severity": "确证",
+      "patterns": [
+        {"signal": "language_gated_reroute", "detail": "中文身份题 100% 改道到封口渠道，英文身份题逃逸 → 网关内置中文关键词规则（验真流量探测器）"},
+        {"signal": "fisher_significant", "detail": "身份题组 vs 结构相似对照组的改道率差异，Fisher 精确检验 p<0.001"}
+      ],
+      "detection": "A/B 对照：身份题组与普通对照组各发 n 次，统计改道率差异（router_detect 探针自动化）",
+      "source_case": "yunjunet 站（E3）"
+    },
+    {
+      "id": "billing_counter_fingerprint",
+      "name": "计费分词器指纹",
+      "severity": "强旁证",
+      "description": "网关自算 usage（用别人家的分词器）而非透传官方 usage——官方转售不需要重新量",
+      "patterns": [
+        {"signal": "cl100k_match", "detail": "稀有 unicode/纯汉字/数字四类探针的 delta 与 cl100k_base 本地计数 ±2 吻合 → 网关用 GPT 系尺子计费", "implication": "DeepSeek/GLM/Kimi 官方均不用 cl100k → OpenAI 系网关转售"},
+        {"signal": "cache_fields_missing", "detail": "官方 DeepSeek usage 含缓存命中字段；透传应有而无 → 网关重算"}
+      ],
+      "detection": "tokenizer_probe 探针：4 类字符分布探针 × cl100k/o200k 双基线交叉验证",
+      "source_case": "Relay-X 案（cl100k 精确吻合 + DeepSeek 官方不用 cl100k → 转售实锤）"
+    },
+    {
+      "id": "gateway_software_tell",
+      "name": "网关软件指纹",
+      "severity": "信号",
+      "description": "错误响应措辞暴露网关框架；框架与「官方直连」话术矛盾即为突破口",
+      "patterns": [
+        {"regex": "Cannot (GET|POST) ", "software": "Express 系自建网关"},
+        {"regex": "未登录或登录已过期|one-api", "software": "one-api"},
+        {"regex": "new-api|无权进行此操作", "software": "new-api（支持改写 model 字段的路由软件）"},
+        {"regex": "Werkzeug|Flask", "software": "Flask 调试模式（重大安全漏洞信号）"}
+      ],
+      "detection": "对 /v1/chat/completions 发 6 种畸形请求（空 body/缺字段/超范围温度/未知参数/坏角色），错误措辞矩阵比对（零成本）",
+      "exposure_paths": ["/v1/dashboard/billing/subscription", "/api/status", "/api/about", "/api/models", "/api/pricing", "/api/notice", "/api/setup", "/api/public/key-summary"],
+      "note": "exposure_paths 为常见自曝端点，多数中转站未鉴权即返回配置信息"
+    },
+    {
+      "id": "temporal_config_fingerprint",
+      "name": "过期系统日期指纹",
+      "severity": "强旁证",
+      "description": "多实例注入的「当前系统日期」不一致且过期 → 上游多套配置实例（换芯/多渠道池）",
+      "patterns": [
+        {"signal": "stale_dates", "detail": "同一站点不同 SKU/渠道返回 ≥2 个互不相同且均早于真实日期的「当前日期」"}
+      ],
+      "source_case": "yunjunet 站（E4：2026-04-25 / 2026-05-20 两个过期日期 vs 真实 08-22）"
+    },
+    {
+      "id": "economic_infeasibility",
+      "name": "经济不可行性",
+      "severity": "强旁证",
+      "description": "定价低于官方成本 → 数学上唯一盈利解是换便宜后端贴牌",
+      "formula": "若 售价 × (1-平台费) < 官方 token 成本 × 预期用量，则官方直连必亏",
+      "source_case": "yunjunet ¥4/天无限量 vs DeepSeek 官方成本 ¥10-20/天"
+    }
+  ],
+  "false_positive_notes": [
+    "真官方直转售站也可能用 one-api/new-api 做纯转发网关——框架指纹单独出现只算「信号」级，需与其他特征互锁",
+    "国产模型自认他厂可能是训练数据污染（如蒸馏残留）——但 usage 逐字相同 + 封口令存在的组合无法用污染解释",
+    "owned_by 字段部分官方聚合平台（如 OpenRouter）也会混挂——判定前先排除知名聚合商"
+  ],
+  "license": "MIT（与主仓库一致）"
+}
