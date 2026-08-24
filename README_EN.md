@@ -52,7 +52,7 @@ It's like buying a gold bar — the label says "999 pure gold", but you have no 
 - [Quick Start](#-quick-start)
 - [How It Works](#%EF%B8%8F-how-it-works)
 - [Technology](#-technology)
-- [New Capabilities in Depth](#-new-capabilities-in-depth-v04)
+- [LLMmap Fingerprinting + Crypto Signatures + Security Audit + Softmax Verdict](#-llmmap-fingerprinting--crypto-signatures--baseline-diff--security-audit--softmax-verdict-v04v05)
 - [Use as an Agent Skill](#-use-as-an-agent-skill)
 - [Local Web UI](#%EF%B8%8F-local-web-ui)
 - [Comparison](#%EF%B8%8F-comparison)
@@ -313,8 +313,9 @@ python -m api_detective web --port 8501
 ## ⚔️ Comparison
 
 | Project | What they have | What they lack (our differentiation) |
-|---|---|---|
-| [elder-plinius / CL4R1T4S](https://github.com/elder-plinius) (~40k★) | NEW_PARADIGM, leetspeak, CCA techniques | No validation pipeline; no relay threat model; no statistics; no verdict engine |
+|---|---|
+|
+[elder-plinius / CL4R1T4S](https://github.com/elder-plinius) (~40k★) | NEW_PARADIGM, leetspeak, CCA techniques | No validation pipeline; no relay threat model; no statistics; no verdict engine |
 | [asgeirtj/system_prompts_leaks](https://github.com/asgeirtj/system_prompts_leaks) (~40k★) | Vendor prompt archives | Their own issue admits most content is behavioral reconstruction |
 | [LLMmap](https://github.com/pasquini-dario/LLMmap) | Black-box model-family fingerprinting | No fraud verdicts, no report-grade evidence chains — **its classifier is now our pre-classification layer** |
 | api-relay-audit | 14-step relay security audit | No model verification, no verdict engine — **its audit approach absorbed as our isolated query-family probes** |
@@ -424,4 +425,39 @@ The key is only used locally, passed via CLI arguments — never written into co
 
 ## 🤝 Contributing
 
-See [CONTRIBUTING
+See [CONTRIBUTING.md](CONTRIBUTING.md). Highlights:
+
+```bash
+pip install -r requirements.txt ruff
+ruff check . --select F,E9          # must pass
+python -m api_detective --version   # CLI smoke
+```
+
+Never commit real keys, real endpoint data, or identifiable site information — anonymize everything (see `examples/relayx_case.md` for the pattern).
+
+---
+
+## 🛡️ Disclaimer
+
+- Use only against endpoints **you hold keys for**; never attack others' services
+- All evidence stays local; the tool uploads nothing
+- Output is technical analysis, not legal advice
+- Follow your local laws and regulations
+
+---
+
+## 🌟 Star History
+
+If this tool saved you money or kept you from a scam, a Star ⭐ helps others find it
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/api-detective&type=Date)](https://star-history.com/#Dragon-01-you/api-detective&Date)
+
+---
+
+<div align="center">
+
+**API Detective** — LLM relay API forensics toolkit
+
+`LLM Forensics` · `Model Fingerprinting` · `Model Equality Testing` · `System Prompt Extraction` · `API Gateway Audit` · `AI Relay Verification` · `Fraud Detection` · `OpenAI API` · `DeepSeek` · `Claude` · `Kimi` · `GLM`
+
+</div>
