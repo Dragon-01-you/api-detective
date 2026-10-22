@@ -234,7 +234,7 @@ flowchart LR
 ## 🧪 采用了哪些技术实现
 
 <div align="center">
-<img src="assets/how_it_works.jpg" alt="芯火 XH 取证流水线示意" width="88%"/>
+<img src="assets/how_it_works.png" alt="芯火 XH 取证流水线：输入 → 探针族 → 判决引擎 → 输出" width="88%"/>
 </div>
 
 **技术栈刻意保持极简**：Python 3.10+，核心仅 3 个运行时依赖（`openai` / `tiktoken` / `requests`），无数据库、无后台服务，所有证据保存在本地目录。重依赖（torch）做成可选安装，未装时对应探针优雅降级。
@@ -402,7 +402,7 @@ python -m api_detective web --port 8501
 **背景**：某中转站宣称提供 DeepSeek 全系官方直连，包月价格仅为官方成本的几百分之一。用户持自有 Key 运行 `dig` 一键取证。
 
 <div align="center">
-<img src="assets/case_forensics.jpg" alt="「Relay-X」取证桌面（示意）" width="88%"/>
+<img src="assets/case_forensics.png" alt="「Relay-X」脱敏案例：5 条证据链得出 33/100 高度可疑" width="88%"/>
 </div>
 
 **取证发现**（节选，全部有 JSON 原始留档）：

@@ -187,7 +187,7 @@ The score is not guesswork: 11 evidence categories with explicit weights, every 
 ## 🧪 Technology
 
 <div align="center">
-<img src="assets/how_it_works.jpg" alt="XH (芯火) forensics pipeline" width="88%"/>
+<img src="assets/how_it_works.png" alt="XH forensics pipeline: input → probe fleet → verdict engine → output" width="88%"/>
 </div>
 
 Deliberately minimal stack: Python 3.10+, three core runtime dependencies (`openai` / `tiktoken` / `requests`), no database, no backend — all evidence stays local. Heavy deps (torch) are optional installs; their probes degrade gracefully when absent.
@@ -342,7 +342,7 @@ python -m api_detective web --port 8501
 **Background**: A relay service claimed full official DeepSeek connectivity at a subscription price hundreds of times below official cost. The user ran `dig` with their own key.
 
 <div align="center">
-<img src="assets/case_forensics.jpg" alt="Relay-X forensics desk (illustrative)" width="88%"/>
+<img src="assets/case_forensics.png" alt="Relay-X case: five evidence chains produce a 33/100 verdict" width="88%"/>
 </div>
 
 **Findings** (excerpt; all backed by archived JSON):
