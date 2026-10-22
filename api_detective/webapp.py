@@ -175,7 +175,7 @@ button:disabled{opacity:.5;cursor:wait}
 .kv{font-size:14px;line-height:2}
 a{color:var(--acc)}
 </style></head><body><div class="wrap">
-<h1>🔍 API <span>Detective</span> 本地控制台</h1>
+<h1>芯火 <span>XH</span> 本地控制台</h1>
 <p class="sub">零遥测：仅监听 127.0.0.1，所有数据保存在本地 ./reports</p>
 <div class="card">
 <label>Base URL（OpenAI 兼容，通常以 /v1 结尾）</label>

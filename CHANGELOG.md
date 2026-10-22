@@ -29,6 +29,7 @@
 
 ### 修复
 - wheel 不再遗漏公开情报库数据文件。
+- Web UI 本地控制台页头残留旧品牌名，已改为「芯火 XH 本地控制台」。
 - **合规修复（重要）**：此前 `MANIFEST.in` 缺省时，含可识别站点域名与商号的未脱敏案例
   `examples/yunjunet_case.md` 会被打进 sdist。现已在 `MANIFEST.in` 加硬排除、
   并把同名规则写进 `.gitignore` 随仓库传播，双重拦截。已验证 sdist 与 wheel 均不含该文件。
