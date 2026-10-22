@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="assets/hero_banner.jpg" alt="XH (芯火) — LLM relay API forensics toolkit" width="100%"/>
+<a href="docs/promo/xh-forensics-promo-30s.mp4"><img src="docs/promo/teaser.gif" alt="XH (芯火) — 30-second promo: five names, one core" width="100%"/></a>
+
+<sub>▶ 30-second promo (no voiceover; click to play the full video)</sub>
 
 # 🔥 XH (芯火)
 

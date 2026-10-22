@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="assets/hero_banner.jpg" alt="芯火 XH — AI 中转站 API 验真取证工具" width="100%"/>
+<a href="docs/promo/xh-forensics-promo-30s.mp4"><img src="docs/promo/teaser.gif" alt="芯火 XH — 30 秒宣传片：五个名字，一个芯" width="100%"/></a>
+
+<sub>▶ 30 秒宣传片（无口播，点击播放完整视频）</sub>
 
 # 🔥 芯火 XH
 

@@ -25,6 +25,8 @@
 - `CHANGELOG.md`（本文件）、`CODE_OF_CONDUCT.md`、`.github/dependabot.yml`、
   `.github/pull_request_template.md`。
 - Python 3.14 分类器；新增 `dev` 可选依赖（`build`、`ruff`）。
+- **30 秒宣传片**：`docs/promo/`（MP4 + 循环 GIF + 海报），README 中英文首屏直接播放；
+  片中数据全部取自真实复测案件与回归基准，并加入两张真实界面截图（报告卡片 / 本机 Web UI）。
 - `pyproject.toml` 补充 `Repository` / `Changelog` / `Intelligence` 项目链接。
 
 ### 修复
