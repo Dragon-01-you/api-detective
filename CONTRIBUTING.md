@@ -1,6 +1,6 @@
 # 参与贡献 | Contributing
 
-感谢你关注 API Detective！欢迎通过 Issue 和 Pull Request 参与。
+感谢你关注芯火 XH（xh-forensics）！欢迎通过 Issue 和 Pull Request 参与。
 
 Thank you for your interest! Issues and PRs are both welcome (English or Chinese).
 

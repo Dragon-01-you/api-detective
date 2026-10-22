@@ -10,7 +10,7 @@ def generate_report(results: dict) -> str:
     lines = []
     a = lines.append
 
-    a("# API 中转站验真报告（api-detective 自动生成）\n")
+    a("# API 中转站验真报告（xh 自动生成）\n")
     a(f"- **目标**：`{meta.get('base_url')}`")
     a(f"- **声称模型**：`{meta.get('model')}`")
     a(f"- **取证时间**：{meta.get('ts_utc')}")

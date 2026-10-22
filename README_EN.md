@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/hero_banner.jpg" alt="API Detective — LLM relay API forensics toolkit" width="100%"/>
+<img src="assets/hero_banner.jpg" alt="XH (芯火) — LLM relay API forensics toolkit" width="100%"/>
 
-# 🔍 API Detective
+# 🔥 XH (芯火)
 
 **LLM relay API forensics — make every cent go to the real model**
 
@@ -10,10 +10,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![CI](https://github.com/Dragon-01-you/api-detective/actions/workflows/ci.yml/badge.svg)](https://github.com/Dragon-01-you/api-detective/actions/workflows/ci.yml)
-[![GitHub stars](https://img.shields.io/github/stars/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/Dragon-01-you/api-detective)](https://github.com/Dragon-01-you/api-detective/issues)
+[![CI](https://github.com/Dragon-01-you/xh-forensics/actions/workflows/ci.yml/badge.svg)](https://github.com/Dragon-01-you/xh-forensics/actions/workflows/ci.yml)
+[![GitHub stars](https://img.shields.io/github/stars/Dragon-01-you/xh-forensics?style=social)](https://github.com/Dragon-01-you/xh-forensics/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Dragon-01-you/xh-forensics?style=social)](https://github.com/Dragon-01-you/xh-forensics/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/Dragon-01-you/xh-forensics)](https://github.com/Dragon-01-you/xh-forensics/issues)
 [![No Telemetry](https://img.shields.io/badge/Telemetry-None-success.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
@@ -31,7 +31,7 @@ But have you ever wondered: **is the model behind the API actually the one you p
 
 It's like buying a gold bar — the label says "999 pure gold", but you have no tool to verify it. **LLM relay services** (API resellers) are exactly that black box: whatever the `model` field says is entirely up to the vendor, and **it can be forged with one line of code**.
 
-**API Detective is the "counterfeit detector" in your pocket**: give it a URL and an API key, and it runs multi-dimensional behavioral forensics against the endpoint, then produces a verdict report with a score, a complete evidence chain, and plain-language explanations.
+**XH (芯火) is the "counterfeit detector" in your pocket**: give it a URL and an API key, and it runs multi-dimensional behavioral forensics against the endpoint, then produces a verdict report with a score, a complete evidence chain, and plain-language explanations.
 
 ### It answers 5 questions
 
@@ -50,24 +50,24 @@ It's like buying a gold bar — the label says "999 pure gold", but you have no 
 - [30-second Demo](#-30-second-demo)
 - [Public Intelligence Library](#-public-intelligence-library-usable-without-installing)
 - [Quick Start](#-quick-start)
-- [How It Works](#%EF%B8%8F-how-it-works)
+- [How It Works](#-how-it-works)
 - [Technology](#-technology)
 - [LLMmap Fingerprinting + Crypto Signatures + Security Audit + Softmax Verdict](#-llmmap-fingerprinting--crypto-signatures--baseline-diff--security-audit--softmax-verdict-v04v05)
 - [Use as an Agent Skill](#-use-as-an-agent-skill)
-- [Local Web UI](#%EF%B8%8F-local-web-ui)
-- [Comparison](#%EF%B8%8F-comparison)
+- [Local Web UI](#-local-web-ui)
+- [Comparison](#-comparison)
 - [Real-world Case](#-real-world-case-relay-x-anonymized)
 - [Evidence Output](#-evidence-output-structure)
 - [FAQ](#-faq)
-- [Roadmap](#%EF%B8%8F-roadmap)
+- [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
-- [Disclaimer](#%EF%B8%8F-disclaimer)
+- [Disclaimer](#-disclaimer)
 
 ---
 
 ## 🎬 30-second Demo
 
-![API Detective terminal demo](assets/demo.gif)
+![XH (芯火) terminal demo](assets/demo.gif)
 
 A condensed replay of a real `dig` run: zero-cost fingerprinting → canary → unmasking (vendor confession matrix, verbatim system-prompt hits) → verdict.
 
@@ -83,7 +83,7 @@ Don't want to install anything? Consume the fraud-pattern intelligence distilled
 - **[fraud_patterns.json](intel/fraud_patterns.json)** — machine-readable library of 9 fraud-pattern families, ready for risk-control rules or academic citation
 - **[Multi-site cross-comparison report](intel/cross_site_comparison.md)** — tactic matrix across three real relay sites + shared bottom-line patterns (incl. the 2026-08 retest: single-backend rebadge confirmed)
 
-> The intel library is pure data (zero deps); `api-detective` is its automated executor. New patterns via PR are welcome.
+> The intel library is pure data (zero deps); `xh` is its automated executor. New patterns via PR are welcome.
 
 ---
 
@@ -103,8 +103,8 @@ Don't want to install anything? Consume the fraud-pattern intelligence distilled
 **① Install**
 
 ```bash
-git clone https://github.com/Dragon-01-you/api-detective.git
-cd api-detective
+git clone https://github.com/Dragon-01-you/xh-forensics.git
+cd xh-forensics
 pip install -r requirements.txt
 ```
 
@@ -154,7 +154,7 @@ Open `./dossier_evidence/DOSSIER.md` — conclusions first, every claim backed b
 
 ---
 
-## ⚙️ How It Works
+## ⚙ How It Works
 
 ```mermaid
 flowchart LR
@@ -185,7 +185,7 @@ The score is not guesswork: 11 evidence categories with explicit weights, every 
 ## 🧪 Technology
 
 <div align="center">
-<img src="assets/how_it_works.jpg" alt="API Detective forensics pipeline" width="88%"/>
+<img src="assets/how_it_works.jpg" alt="XH (芯火) forensics pipeline" width="88%"/>
 </div>
 
 Deliberately minimal stack: Python 3.10+, three core runtime dependencies (`openai` / `tiktoken` / `requests`), no database, no backend — all evidence stays local. Heavy deps (torch) are optional installs; their probes degrade gracefully when absent.
@@ -290,12 +290,12 @@ Agent: reads DOSSIER.md → cites 3–5 key clues → plain-language report + co
 ```
 
 - Root [`SKILL.md`](SKILL.md) — Agent Skill spec format (When to use / How to use / Output)
-- [`skills/api-detective/SKILL.md`](skills/api-detective/SKILL.md) — Hermes Agent format
+- [`skills/xh-forensics/SKILL.md`](skills/xh-forensics/SKILL.md) — Hermes Agent format
 - Triggers: test API relay / verify relay / is my model fake / extract system prompt / detect rebadging
 
 ---
 
-## 🖥️ Local Web UI
+## 🖥 Local Web UI
 
 ```bash
 python -m api_detective web --port 8501
@@ -310,7 +310,7 @@ python -m api_detective web --port 8501
 
 ---
 
-## ⚔️ Comparison
+## ⚔ Comparison
 
 | Project | What they have | What they lack (our differentiation) |
 |---|---|
@@ -403,7 +403,7 @@ The key is only used locally, passed via CLI arguments — never written into co
 
 ---
 
-## 🗺️ Roadmap
+## 🗺 Roadmap
 
 - [x] Identity lie-detection / prompt arsenal / vendor attribution / MET / verdict engine
 - [x] One-shot `dig` mode → DOSSIER
@@ -437,7 +437,7 @@ Never commit real keys, real endpoint data, or identifiable site information —
 
 ---
 
-## 🛡️ Disclaimer
+## 🛡 Disclaimer
 
 - Use only against endpoints **you hold keys for**; never attack others' services
 - All evidence stays local; the tool uploads nothing
@@ -450,13 +450,13 @@ Never commit real keys, real endpoint data, or identifiable site information —
 
 If this tool saved you money or kept you from a scam, a Star ⭐ helps others find it
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/api-detective&type=Date)](https://star-history.com/#Dragon-01-you/api-detective&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/xh-forensics&type=Date)](https://star-history.com/#Dragon-01-you/xh-forensics&Date)
 
 ---
 
 <div align="center">
 
-**API Detective** — LLM relay API forensics toolkit
+**XH (芯火)** (`xh-forensics`) — LLM relay API forensics toolkit
 
 `LLM Forensics` · `Model Fingerprinting` · `Model Equality Testing` · `System Prompt Extraction` · `API Gateway Audit` · `AI Relay Verification` · `Fraud Detection` · `OpenAI API` · `DeepSeek` · `Claude` · `Kimi` · `GLM`
 

@@ -5,7 +5,7 @@ description: "Optimizes GitHub repositories to top open-source project standards
 
 # GitHub Repository Optimizer
 
-将任意 GitHub 仓库优化至顶尖开源项目标准的一站式技能。沉淀自真实项目实战（api-detective），所有命令与模板均经验证。
+将任意 GitHub 仓库优化至顶尖开源项目标准的一站式技能。沉淀自真实项目实战（芯火 XH / xh-forensics），所有命令与模板均经验证。
 
 ## 优化分层模型（执行顺序）
 

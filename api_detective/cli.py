@@ -358,7 +358,7 @@ def cmd_baseline(args) -> None:
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(prog="api-detective",
+    ap = argparse.ArgumentParser(prog="xh",
                                  description="中转站 API 验真取证工具")
     ap.add_argument("--version", action="version", version=__version__)
     sub = ap.add_subparsers(dest="cmd", required=True)

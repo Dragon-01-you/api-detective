@@ -3,8 +3,8 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "api-detective"
-description = "AI 中转站 API 验真取证工具：模型验真 · 系统提示词提取 · 上下游供应链溯源 | LLM relay API forensics toolkit"
+name = "xh-forensics"
+description = "芯火 XH · AI 中转站 API 验真取证工具：模型验真 · 系统提示词提取 · 上下游供应链溯源 | XH forensics: verify the real model behind any OpenAI-compatible relay endpoint"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
@@ -13,6 +13,7 @@ keywords = [
     "llm", "api-security", "forensics", "openai-api", "deepseek",
     "model-verification", "system-prompt", "prompt-extraction",
     "ai-security", "fraud-detection", "cli-tool", "model-fingerprinting",
+    "relay-api", "api-middleman", "xinhuo", "xh",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -24,6 +25,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Security",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
@@ -39,12 +41,20 @@ dynamic = ["version"]
 llmmap = ["torch", "transformers", "scipy", "numpy", "accelerate"]
 # Web UI 报告卡片 JPG 输出（SVG 卡片零依赖恒有）
 card = ["pillow"]
+# 打包/校验
+dev = ["build", "ruff"]
 
 [project.urls]
-Homepage = "https://github.com/Dragon-01-you/api-detective"
-Issues = "https://github.com/Dragon-01-you/api-detective/issues"
+Homepage = "https://github.com/Dragon-01-you/xh-forensics"
+Repository = "https://github.com/Dragon-01-you/xh-forensics"
+Issues = "https://github.com/Dragon-01-you/xh-forensics/issues"
+Changelog = "https://github.com/Dragon-01-you/xh-forensics/blob/main/CHANGELOG.md"
+Intelligence = "https://github.com/Dragon-01-you/xh-forensics/tree/main/intel"
 
 [project.scripts]
+xh = "api_detective.cli:main"
+xh-forensics = "api_detective.cli:main"
+# 兼容旧名，老用户脚本不失效
 api-detective = "api_detective.cli:main"
 
 [tool.setuptools.dynamic]
@@ -52,6 +62,13 @@ version = { attr = "api_detective.__version__" }
 
 [tool.setuptools.packages.find]
 include = ["api_detective*"]
+
+# 公开情报库 / 基线模板 / 技能包随 wheel 一起安装到 <prefix>/share/xh-forensics/
+# （intel/ 不被运行时代码读取，是给人和其他程序直接消费的纯数据，故用 data-files 而非 package-data）
+[tool.setuptools.data-files]
+"share/xh-forensics/intel" = ["intel/README.md", "intel/fraud_patterns.json", "intel/cross_site_comparison.md"]
+"share/xh-forensics/baselines" = ["baselines/_template.json"]
+"share/xh-forensics/skills" = ["skills/xh-forensics/SKILL.md", "SKILL.md"]
 
 [tool.ruff.lint]
 # CI 使用: ruff check . --select F,E9（真实错误）

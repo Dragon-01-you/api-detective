@@ -1,4 +1,4 @@
-"""api-detective: 中转站 API 验真取证工具包。
+"""xh-forensics（芯火 XH）: 中转站 API 验真取证工具包。
 
 给任何 OpenAI 兼容端点做"验真体检"：它背后到底是什么模型？
 方法论对标:
@@ -39,4 +39,4 @@ v0.5.0 新增（对标顶尖项目的「数据即产品」基因）:
 - 学术引用: CITATION.cff（GitHub 渲染 "Cite this repository" 按钮）
 """
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"

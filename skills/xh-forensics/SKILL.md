@@ -1,9 +1,9 @@
 ---
-name: "api-detective"
+name: "xh-forensics"
 description: "AI relay API forensics: verify the model behind an API key, extract injected system prompts, and trace the upstream supply chain. Invoke when user mentions testing an API relay, checking if a purchased model is fake, verifying API relay authenticity, extracting system prompts, or detecting rebranded/counterfeit models."
 ---
 
-# API Detective — AI 中转站 API 验真取证（Hermes Agent 格式）
+# 芯火 XH — AI 中转站 API 验真取证（Hermes Agent 格式）
 
 对 OpenAI 兼容端点执行多维度行为取证，产出评分 0–100 的判决报告与完整证据链。
 
@@ -19,8 +19,8 @@ description: "AI relay API forensics: verify the model behind an API key, extrac
 ### 环境准备（首次）
 
 ```bash
-git clone https://github.com/Dragon-01-you/api-detective.git
-cd api-detective
+git clone https://github.com/Dragon-01-you/xh-forensics.git
+cd xh-forensics
 pip install -r requirements.txt
 ```
 

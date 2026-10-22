@@ -120,7 +120,7 @@ def _render_card_svg(rid: str, model: str, score, tier, p,
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420">
 <rect width="640" height="420" rx="18" fill="#fafbfc" stroke="#d8dee4"/>
 <rect width="640" height="92" rx="18" fill="#1b2430"/>
-<text x="40" y="46" font-size="26" font-weight="bold" fill="#fff">API Detective 报告卡片</text>
+<text x="40" y="46" font-size="26" font-weight="bold" fill="#fff">芯火 XH 报告卡片</text>
 <text x="40" y="74" font-size="15" fill="#9fb0c3">model: {_xml_escape(model)} · id: {rid[:8]}</text>
 <text x="40" y="165" font-size="58" font-weight="bold" fill="{color}">{score}</text>
 <text x="160" y="165" font-size="20" fill="#333">/100 · {_xml_escape(tier)}</text>
@@ -137,7 +137,7 @@ def _render_card_jpg(out_dir: str, rid: str, model: str, score, tier, p,
     img = Image.new("RGB", (640, 420), "#fafbfc")
     d = ImageDraw.Draw(img)
     d.rounded_rectangle([0, 0, 640, 92], 18, fill="#1b2430")
-    d.text((40, 24), "API Detective Report", fill="#ffffff")
+    d.text((40, 24), "XH Forensics Report", fill="#ffffff")
     d.text((40, 52), f"model: {model[:40]} · id: {rid[:8]}", fill="#9fb0c3")
     color = "#e0533d" if isinstance(score, int) and score < 45 else \
         ("#e8a33d" if isinstance(score, int) and score < 65 else "#3da85c")
@@ -156,7 +156,7 @@ def _render_card_jpg(out_dir: str, rid: str, model: str, score, tier, p,
 # 内嵌单页前端
 # ----------------------------------------------------------------------
 _INDEX_HTML = """<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
-<title>API Detective — 本地控制台</title>
+<title>芯火 XH — 本地控制台</title>
 <style>
 :root{--bg:#0f141a;--panel:#161d26;--line:#232d3a;--txt:#dbe4ee;--dim:#8296ad;--ok:#3da85c;--warn:#e8a33d;--bad:#e0533d;--acc:#4a90d9}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt)}
@@ -389,7 +389,7 @@ table{{border-collapse:collapse;width:100%;margin-top:18px;font-size:13px}}
 td,th{{border:1px solid #232d3a;padding:8px 10px;text-align:left;vertical-align:top}}
 th{{background:#161d26}}.score{{font-size:48px;font-weight:700}}
 a{{color:#4a90d9}}</style></head><body><div class="w">
-<h1>🔍 API Detective 报告 <small style="color:#8296ad">{_x(rid)}</small></h1>
+<h1>🔥 芯火 XH 报告 <small style="color:#8296ad">{_x(rid)}</small></h1>
 <p>端点: {_x(meta.get('base_url'))} · 模型: {_x(meta.get('model'))} · {_x(meta.get('ts_utc'))}</p>
 <div class="score">{_x(v.get('score'))}/100</div>
 <p><b>{_x(v.get('tier'))}</b> — {_x(v.get('tier_desc'))}</p>
@@ -411,7 +411,7 @@ def run_webapp(port: int = 8501, reports_dir: str = REPORTS_DIR) -> None:
     REPORTS_DIR = reports_dir
     os.makedirs(REPORTS_DIR, exist_ok=True)
     srv = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    print(f"[*] API Detective Web UI: http://127.0.0.1:{port}")
+    print(f"[*] 芯火 XH Web UI: http://127.0.0.1:{port}")
     print(f"[*] 报告目录: {os.path.abspath(REPORTS_DIR)}（零遥测，仅本地监听）")
     try:
         srv.serve_forever()

@@ -1,0 +1,33 @@
+include LICENSE
+include README.md
+include README_EN.md
+include CHANGELOG.md
+include CITATION.cff
+include CONTRIBUTING.md
+include CODE_OF_CONDUCT.md
+include SECURITY.md
+include SKILL.md
+include requirements.txt
+include requirements-llmmap.txt
+include pyproject.toml
+
+# 公开情报库 —— 核心卖点，必须随 sdist 分发
+recursive-include intel *.md *.json
+# 基线模板（运行时读取 ./baselines 的起点）
+recursive-include baselines *.json
+# Agent Skill 分发 + 仓库优化器脚本
+recursive-include skills *.md *.py *.sh
+# 文档与真实案例（examples 中部分文件按 .gitignore 策略不入库，存在才打包）
+recursive-include docs *.md
+recursive-include examples *.md
+
+# 🔒 合规硬排除：含可识别站点域名/商号的未脱敏案例，绝不进任何发行包
+# （即使本地存在、即使 git 忽略规则失效，也必须在此再挡一次）
+exclude examples/yunjunet_case.md
+prune evidence_yunjunet
+# 回归基准用例
+recursive-include tests *.py *.json
+# 演示素材
+recursive-include assets *.jpg *.gif *.png *.svg
+
+global-exclude __pycache__ *.py[cod] .DS_Store *.egg-info

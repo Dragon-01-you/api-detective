@@ -25,7 +25,7 @@
 
 ## 与工具的关系
 
-- 情报库是**纯数据**，独立可用；`api-detective` 的探针（[fingerprint.py](../api_detective/fingerprint.py)、[verdict.py](../api_detective/verdict.py) 等）是这些特征的**自动化执行器**
+- 情报库是**纯数据**，独立可用；`xh` 的探针（[fingerprint.py](../api_detective/fingerprint.py)、[verdict.py](../api_detective/verdict.py) 等）是这些特征的**自动化执行器**
 - 用工具跑出的新案件特征 → 欢迎脱敏后 PR 回填本库（附可复现判定方法）
 - 每个特征的 `detection` 字段写明了人工复现方法——不装工具也能自查你正在用的中转站
 

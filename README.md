@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/hero_banner.jpg" alt="API Detective — AI 中转站 API 验真取证工具" width="100%"/>
+<img src="assets/hero_banner.jpg" alt="芯火 XH — AI 中转站 API 验真取证工具" width="100%"/>
 
-# 🔍 API Detective
+# 🔥 芯火 XH
 
 **AI 中转站 API 验真取证工具 —— 让每一分钱都花在真模型上**
 
@@ -12,14 +12,16 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![CI](https://github.com/Dragon-01-you/api-detective/actions/workflows/ci.yml/badge.svg)](https://github.com/Dragon-01-you/api-detective/actions/workflows/ci.yml)
-[![GitHub stars](https://img.shields.io/github/stars/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/Dragon-01-you/api-detective)](https://github.com/Dragon-01-you/api-detective/issues)
+[![CI](https://github.com/Dragon-01-you/xh-forensics/actions/workflows/ci.yml/badge.svg)](https://github.com/Dragon-01-you/xh-forensics/actions/workflows/ci.yml)
+[![GitHub stars](https://img.shields.io/github/stars/Dragon-01-you/xh-forensics?style=social)](https://github.com/Dragon-01-you/xh-forensics/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Dragon-01-you/xh-forensics?style=social)](https://github.com/Dragon-01-you/xh-forensics/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/Dragon-01-you/xh-forensics)](https://github.com/Dragon-01-you/xh-forensics/issues)
 [![No Telemetry](https://img.shields.io/badge/Telemetry-None-success.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
 模型验真 · 系统提示词取证 · 上下游供应链溯源
+
+<sub>**芯火** — 模型的「芯」是真是假，用「火」一验便知。英文标识 **XH** = **X**inhuo。</sub>
 
 </div>
 
@@ -42,7 +44,7 @@
 | `step-3.7-flash` | **StepFun（阶跃星辰）** | usage 43/161 与众不同，自答 "developed by StepFun" | ✅ 真货（唯一） |
 | `deepseek-v4` / `qwen-max` | **不存在** | 网关 404 / 502 虚挂，商家卖的名字在自己系统里都没有 | 🚨 确定级 |
 
-> 结论：商家目录里 10 个 SKU，6 个回到同一个 **MiniMax-M3**，1 个是漏网的 **Kimi**，1 个是真货 **StepFun**（被当"验真展示位"迷惑买家），2 个根本不存在。详见 [案例：讯捷词元](examples/yunjunet_case.md)。
+> 结论：商家目录里 10 个 SKU，6 个回到同一个 **MiniMax-M3**，1 个是漏网的 **Kimi**，1 个是真货 **StepFun**（被当"验真展示位"迷惑买家），2 个根本不存在。手法矩阵见 [多站点横向对比](intel/cross_site_comparison.md)；完全脱敏的完整案例范文见 [Relay-X 复盘](examples/relayx_case.md)。
 
 ### 🚩 30 秒速查表：一张表识别可疑中转站
 
@@ -65,7 +67,7 @@
 | [intel/fraud_patterns.json](intel/fraud_patterns.json) | 9 大类机器可读欺诈特征库（自造 SKU / 命名空间泄露 / 换皮 / 封口令 / 路由 / 分词器指纹 / 软件指纹 / 过期日期 / 经济不可行） | 任何语言 `json.load`；每条附 regex/判定方法/证据等级/来源案件 |
 | [intel/cross_site_comparison.md](intel/cross_site_comparison.md) | 多站点横向对比：3 个真实站点的手法矩阵 + 2026-08 复测更新 | 直接阅读 |
 
-> 情报库是**纯数据**，独立可用；`api-detective` 的探针是这些特征的**自动化执行器**。欢迎 PR 回填新特征（附可复现判定方法）。
+> 情报库是**纯数据**，独立可用；`xh` 的探针是这些特征的**自动化执行器**。欢迎 PR 回填新特征（附可复现判定方法）。
 
 ---
 
@@ -77,7 +79,7 @@
 
 这就像去金店买金条——标签写着「足金 999」，可你手里没有任何验金工具。市面上的**中转站**（API 转售服务）就是这样一个黑盒：接口里的 `model` 字段写什么全凭商家良心，**一行代码就能伪造**。
 
-**API Detective 就是你口袋里的「验钞机」**：给它一个 URL 和 API Key，它会像侦探一样对目标端点展开多维度行为取证，最后产出一份带评分、带完整证据链、小白也能看懂的《验真报告》。
+**芯火 XH 就是你口袋里的「验钞机」**：给它一个 URL 和 API Key，它会像侦探一样对目标端点展开多维度行为取证，最后产出一份带评分、带完整证据链、小白也能看懂的《验真报告》。
 
 ### 它能回答 5 个问题
 
@@ -93,7 +95,7 @@
 
 ## 🎬 30 秒演示
 
-![API Detective 终端演示](assets/demo.gif)
+![芯火 XH 终端演示](assets/demo.gif)
 
 一次真实 `dig` 运行的浓缩回放：零成本指纹 → 金丝雀 → 揭面（厂商自认矩阵 / 系统提示词逐字命中）→ 判决引擎。
 
@@ -110,9 +112,9 @@
 - [技术实现](#-采用了哪些技术实现)
 - [LLMmap 指纹 + 加密签名 + 基线比对 + 安全审计 + Softmax 判决](#-llmmap-指纹--加密签名--基线比对--安全审计--softmax-判决v04v05-迭代)
 - [作为 Agent Skill 使用](#-作为-agent-skill-使用)
-- [Web UI 本地控制台](#️-web-ui-本地控制台)
+- [Web UI 本地控制台](#-web-ui-本地控制台)
 - [对比同类项目](#-对比同类项目)
-- [实际案例](#-实际案例relay-x-低价包月中转站验真已脱敏)
+- [实际案例](#-实际案例relay-x低价包月中转站验真已脱敏)
 - [证据输出结构](#-证据输出结构)
 - [常见问题](#-faq)
 - [路线图](#-路线图)
@@ -137,15 +139,15 @@
 **① 安装依赖**
 
 ```bash
-git clone https://github.com/Dragon-01-you/api-detective.git
-cd api-detective
+git clone https://github.com/Dragon-01-you/xh-forensics.git
+cd xh-forensics
 pip install -r requirements.txt
 ```
 
-或直接安装为命令行工具（提供 `api-detective` 命令）：
+或直接安装为命令行工具（提供 `xh` 命令；`api-detective` 作为兼容别名保留）：
 
 ```bash
-pip install git+https://github.com/Dragon-01-you/api-detective.git
+pip install git+https://github.com/Dragon-01-you/xh-forensics.git
 ```
 
 **② 一键挖掘（推荐）**
@@ -203,7 +205,7 @@ python -m api_detective baseline --generate gpt-4o --base-url ... --api-key ... 
 
 ---
 
-## ⚙️ 工作原理
+## ⚙ 工作原理
 
 `dig` 的流程：零成本指纹（错误矩阵 / 特征端点 / 定价表 / 自曝消息 / 姊妹站发现）→ 金丝雀 → 揭面 → **LLMmap 预训练指纹（快速预分类层）** → 身份测谎 → 提示词武库（含二十问假设确认收网）→ 厂商归属 → 路由/分词器 → **加密签名验证 + 安全审计** → MET → 供应链关系网 → **官方基线比对（可选）** → 判决引擎 v2 → `DOSSIER.md`（含全量证据清单）。计费被挡时自动降级并显式标注「证据不完整」。
 
@@ -230,7 +232,7 @@ flowchart LR
 ## 🧪 采用了哪些技术实现
 
 <div align="center">
-<img src="assets/how_it_works.jpg" alt="API Detective 取证流水线示意" width="88%"/>
+<img src="assets/how_it_works.jpg" alt="芯火 XH 取证流水线示意" width="88%"/>
 </div>
 
 **技术栈刻意保持极简**：Python 3.10+，核心仅 3 个运行时依赖（`openai` / `tiktoken` / `requests`），无数据库、无后台服务，所有证据保存在本地目录。重依赖（torch）做成可选安装，未装时对应探针优雅降级。
@@ -341,12 +343,12 @@ Agent: 读取 DOSSIER.md → 引用 3-5 条关键证据 → 小白语言汇报 +
 ```
 
 - 根目录 [`SKILL.md`](SKILL.md)——Agent Skill 规范格式（When to use / How to use / Output）
-- [`skills/api-detective/SKILL.md`](skills/api-detective/SKILL.md)——Hermes Agent 格式
+- [`skills/xh-forensics/SKILL.md`](skills/xh-forensics/SKILL.md)——Hermes Agent 格式
 - 触发词：测试 API 中转站 / 验真 relay / 模型是不是真的 / 提取系统提示词 / 检测贴牌
 
 ---
 
-## 🖥️ Web UI 本地控制台
+## 🖥 Web UI 本地控制台
 
 ```bash
 python -m api_detective web --port 8501
@@ -508,13 +510,13 @@ python -m api_detective --version   # CLI 冒烟
 
 如果这个工具帮你省了冤枉钱或避了坑，欢迎点个 Star ⭐ 让更多人看到
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/api-detective&type=Date)](https://star-history.com/#Dragon-01-you/api-detective&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/xh-forensics&type=Date)](https://star-history.com/#Dragon-01-you/xh-forensics&Date)
 
 ---
 
 <div align="center">
 
-**API Detective** — LLM relay API forensics toolkit
+**芯火 XH**（`xh-forensics`）— LLM relay API forensics toolkit
 
 `AI中转站` · `API验真` · `假模型检测` · `模型指纹` · `系统提示词提取` · `System Prompt Extraction` · `LLM Forensics` · `Model Fingerprinting` · `Model Equality Testing` · `API Gateway Audit` · `大模型安全` · `DeepSeek` · `GPT中转` · `Claude中转`
 

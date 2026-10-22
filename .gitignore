@@ -20,6 +20,11 @@ dossier_evidence/
 *_evidence/
 *.har
 
+# 🔒 合规：未脱敏的真实案例（含可识别站点域名/商号）。公开版一律用代号重写后另存。
+#    同名条目亦写在 MANIFEST.in 里，防止绕过 git 忽略规则被打进发行包。
+examples/yunjunet_case.md
+evidence_yunjunet/
+
 # Web UI 运行产物（报告目录含用户 API 数据；基线生成的原始运行记录不入库）
 reports/
 baselines/_runs/

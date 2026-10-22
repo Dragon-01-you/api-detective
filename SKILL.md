@@ -1,9 +1,9 @@
 ---
-name: api-detective
+name: xh-forensics
 description: AI 中转站 API 验真取证工具——验证模型真伪、提取注入系统提示词、溯源上游供应链。当用户提到测试 API 中转站、想知道买的模型是不是真的、验真 API relay、提取系统提示词、检测贴牌模型时使用。
 ---
 
-# API Detective — AI 中转站 API 验真取证
+# 芯火 XH — AI 中转站 API 验真取证
 
 对 OpenAI 兼容端点执行多维度行为取证：模型身份测谎、系统提示词提取、内容路由检测、
 分词器指纹、供应链溯源，最终产出带评分（0–100）与完整证据链的判决报告。
@@ -24,8 +24,8 @@ description: AI 中转站 API 验真取证工具——验证模型真伪、提�
 ### 前置条件
 
 ```bash
-git clone https://github.com/Dragon-01-you/api-detective.git
-cd api-detective
+git clone https://github.com/Dragon-01-you/xh-forensics.git
+cd xh-forensics
 pip install -r requirements.txt
 ```
 

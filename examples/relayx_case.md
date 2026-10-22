@@ -8,7 +8,7 @@
 - 用户购买了某中转站的**低价包月会员**，宣称「DeepSeek / Kimi / GLM / MiniMax 全系官方直连」
 - 包月价格仅为对应官方 API 成本的**几百分之一**
 - 站点提供标准 OpenAI 兼容接口（`/v1/chat/completions`）
-- 用户持有自己的 Key，决定用 API Detective 做一次完整验真
+- 用户持有自己的 Key，决定用芯火 XH 做一次完整验真
 
 ## 执行
 
@@ -95,4 +95,4 @@ python -m api_detective dig \
 
 ---
 
-*本案例由 API Detective 自动化取证产出。工具地址见仓库主页。*
+*本案例由芯火 XH 自动化取证产出。工具地址见仓库主页。*
