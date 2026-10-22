@@ -19,7 +19,7 @@ description: "AI relay API forensics: verify the model behind an API key, extrac
 ### 环境准备（首次）
 
 ```bash
-git clone https://github.com/Dragon-01-you/api-detective.git
+git clone https://github.com/Dragon-01-you/xh-forensics.git
 cd xh-forensics
 pip install -r requirements.txt
 ```

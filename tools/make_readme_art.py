@@ -8,7 +8,6 @@
     python3 tools/make_readme_art.py
 """
 import os
-import shutil
 import subprocess
 import sys
 
@@ -262,7 +261,7 @@ def case_forensics():
         b.append(t(RX, 620 + j * 24, line, 12, G5))
 
     b.append(rule(PAD, 762, R))
-    b.append(t(PAD, 788, "芯火 XH · github.com/Dragon-01-you/api-detective", 12, G4))
+    b.append(t(PAD, 788, "芯火 XH · github.com/Dragon-01-you/xh-forensics", 12, G4))
     b.append(t(R, 788, "同理可跑自己的端点：xh dig --base-url ... --key ...", 12, G4, anchor="end"))
     return canvas(W, H, "".join(b))
 

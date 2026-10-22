@@ -62,7 +62,7 @@
 
 如遇滥用、骚扰或其他不可接受的行为，请通过以下方式联系维护者：
 
-- 在仓库中**私下**通过 [Security Advisories](https://github.com/Dragon-01-you/api-detective/security/advisories/new) 提交
+- 在仓库中**私下**通过 [Security Advisories](https://github.com/Dragon-01-you/xh-forensics/security/advisories/new) 提交
 - 或发送邮件至仓库维护者（见 `pyproject.toml` 中 authors 字段对应的 GitHub 账号）
 
 所有投诉都会得到及时、公正的审查与处理。维护者有义务尊重举报者的隐私与安全。

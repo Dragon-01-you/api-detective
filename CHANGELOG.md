@@ -6,6 +6,15 @@
 
 ---
 
+## [Unreleased]
+
+### 变更
+- **仓库地址迁移完成**：GitHub 仓库由 `Dragon-01-you/api-detective` 更名为
+  `Dragon-01-you/xh-forensics`，与产品名、PyPI 包名、命令名统一。README 徽章、
+  clone 地址、`pyproject.toml` 的 `[project.urls]`、`CITATION.cff`、Skill 包、
+  两张配图页脚、30 秒宣传片片尾地址均已同步。GitHub 保留旧名 301 重定向，
+  历史链接不会失效。`api-detective` 命令行别名继续保留。
+
 ## [0.6.0] — 2026-08-25
 
 > 本次为**品牌重塑 + 工程化补全**版本，探针与判决逻辑无改动。
