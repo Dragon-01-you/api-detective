@@ -12,10 +12,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![CI](https://github.com/Dragon-01-you/xh-forensics/actions/workflows/ci.yml/badge.svg)](https://github.com/Dragon-01-you/xh-forensics/actions/workflows/ci.yml)
-[![GitHub stars](https://img.shields.io/github/stars/Dragon-01-you/xh-forensics?style=social)](https://github.com/Dragon-01-you/xh-forensics/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Dragon-01-you/xh-forensics?style=social)](https://github.com/Dragon-01-you/xh-forensics/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/Dragon-01-you/xh-forensics)](https://github.com/Dragon-01-you/xh-forensics/issues)
+[![CI](https://github.com/Dragon-01-you/api-detective/actions/workflows/ci.yml/badge.svg)](https://github.com/Dragon-01-you/api-detective/actions/workflows/ci.yml)
+[![GitHub stars](https://img.shields.io/github/stars/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Dragon-01-you/api-detective?style=social)](https://github.com/Dragon-01-you/api-detective/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/Dragon-01-you/api-detective)](https://github.com/Dragon-01-you/api-detective/issues)
 [![No Telemetry](https://img.shields.io/badge/Telemetry-None-success.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
@@ -105,7 +105,7 @@ Don't want to install anything? Consume the fraud-pattern intelligence distilled
 **① Install**
 
 ```bash
-git clone https://github.com/Dragon-01-you/xh-forensics.git
+git clone https://github.com/Dragon-01-you/api-detective.git
 cd xh-forensics
 pip install -r requirements.txt
 ```
@@ -452,7 +452,7 @@ Never commit real keys, real endpoint data, or identifiable site information —
 
 If this tool saved you money or kept you from a scam, a Star ⭐ helps others find it
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/xh-forensics&type=Date)](https://star-history.com/#Dragon-01-you/xh-forensics&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Dragon-01-you/api-detective&type=Date)](https://star-history.com/#Dragon-01-you/api-detective&Date)
 
 ---
 

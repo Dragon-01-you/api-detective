@@ -24,7 +24,7 @@ description: AI 中转站 API 验真取证工具——验证模型真伪、提�
 ### 前置条件
 
 ```bash
-git clone https://github.com/Dragon-01-you/xh-forensics.git
+git clone https://github.com/Dragon-01-you/api-detective.git
 cd xh-forensics
 pip install -r requirements.txt
 ```

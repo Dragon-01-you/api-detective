@@ -11,8 +11,9 @@
 > 本次为**品牌重塑 + 工程化补全**版本，探针与判决逻辑无改动。
 
 ### 变更
-- **项目更名为「芯火 XH」**，GitHub 仓库由 `api-detective` 迁移至 [`xh-forensics`](https://github.com/Dragon-01-you/xh-forensics)。
-  旧仓库地址会由 GitHub 自动 301 重定向，历史链接与 clone 不受影响。
+- **项目更名为「芯火 XH」**（产品名与 PyPI 包名 `xh-forensics`）；GitHub 仓库路径
+  暂沿用 `api-detective`，以保证徽章、clone 与历史链接即刻可用。日后迁移到
+  `xh-forensics` 时，GitHub 会自动 301 重定向，无需改动任何链接。
 - PyPI 包名统一为 `xh-forensics`，新增命令 `xh` 与 `xh-forensics`；
   原 `api-detective` 命令**保留为兼容别名**，已有脚本无需修改。
 - Python 导入路径 `api_detective.*` **保持不变**，属于内部实现，不随品牌改名。

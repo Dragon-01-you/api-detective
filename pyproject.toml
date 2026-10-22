@@ -45,11 +45,11 @@ card = ["pillow"]
 dev = ["build", "ruff"]
 
 [project.urls]
-Homepage = "https://github.com/Dragon-01-you/xh-forensics"
-Repository = "https://github.com/Dragon-01-you/xh-forensics"
-Issues = "https://github.com/Dragon-01-you/xh-forensics/issues"
-Changelog = "https://github.com/Dragon-01-you/xh-forensics/blob/main/CHANGELOG.md"
-Intelligence = "https://github.com/Dragon-01-you/xh-forensics/tree/main/intel"
+Homepage = "https://github.com/Dragon-01-you/api-detective"
+Repository = "https://github.com/Dragon-01-you/api-detective"
+Issues = "https://github.com/Dragon-01-you/api-detective/issues"
+Changelog = "https://github.com/Dragon-01-you/api-detective/blob/main/CHANGELOG.md"
+Intelligence = "https://github.com/Dragon-01-you/api-detective/tree/main/intel"
 
 [project.scripts]
 xh = "api_detective.cli:main"

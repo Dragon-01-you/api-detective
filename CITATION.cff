@@ -10,8 +10,8 @@ message: >-
 type: software
 authors:
   - name: Dragon-01-you
-repository-code: "https://github.com/Dragon-01-you/xh-forensics"
-url: "https://github.com/Dragon-01-you/xh-forensics"
+repository-code: "https://github.com/Dragon-01-you/api-detective"
+url: "https://github.com/Dragon-01-you/api-detective"
 abstract: >-
   AI 中转站 API 验真取证工具：给任何 OpenAI 兼容端点做黑盒「验真体检」。
   12+ 探针模块（LLMmap 预训练指纹 / 加密签名验证 / 内容路由 Fisher 检验 /
