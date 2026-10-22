@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # Python 依赖安全更新（运行时依赖）
+  # Python 依赖安全更新（运行时依赖 + 可选推理栈，同一 pip 目录只能有一个配置项）
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
@@ -16,28 +16,20 @@ updates:
       prefix: "chore(deps)"
       include: "scope"
     groups:
-      # 把零散补丁版本合并成一个 PR，减少噪音
+      # 零散补丁版本合并成一个 PR，减少噪音
       patch-updates:
         applies-to: version-updates
         update-types:
           - "patch"
-
-  # 可选推理栈（torch / transformers 等）单独分组，避免与主依赖混在一起
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    allow:
-      - dependency-name: "torch"
-      - dependency-name: "transformers"
-      - dependency-name: "accelerate"
-      - dependency-name: "scipy"
-      - dependency-name: "numpy"
-    labels:
-      - "dependencies"
-      - "llmmap"
-    commit-message:
-      prefix: "chore(deps-llmmap)"
+      # 可选推理栈（torch / transformers 等）体量大、升级风险高，单独成组
+      llmmap-stack:
+        applies-to: version-updates
+        patterns:
+          - "torch"
+          - "transformers"
+          - "accelerate"
+          - "scipy"
+          - "numpy"
 
   # GitHub Actions 版本更新
   - package-ecosystem: "github-actions"
